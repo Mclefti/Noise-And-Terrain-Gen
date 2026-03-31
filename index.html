@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Noise & TerrainGen - Free Online Graph Noise Editor | Perlin | Simplex | Voronoi</title>
+  <meta name="description"
+    content="Noise & TerrainGen is a free web graph-based noise editor for creating procedural textures and generative content. Explore, and experiment with noise functions.">
+  <meta name="keywords"
+    content="noise editor, procedural textures, graph editor, perlin noise, simplex noise, voronoi noise, generative art, web-based editor">
+  <meta name="author" content="Mclefti">
+
+  <meta name="google-site-verification" content="Tdi4ds4wGpTJVlhqQGM6AjeJpwYXXpbjp45eaX-C9eQ" />
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Noise & TerrainGen",
+    "url": "https://github.com/Mclefti/NoiseAndTerrainGen",
+    "description": "Web-based graph editor for creating procedural textures, terrains, and generative content.",
+    "applicationCategory": "DesignApplication",
+    "operatingSystem": "Web",
+    "author": {
+      "@type": "Person",
+      "name": "Mclefti",
+      "url": "https://github.com/Mclefti"
+    }
+  }
+  </script>
+
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="Noise & TerrainGen - Free Online Graph Noise Editor">
+  <meta property="og:description"
+    content="Create procedural textures and generative content online with Noise & TerrainGen, the web-based graph editor.">
+  <meta property="og:image" content="img/og_image.png">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Noise & TerrainGen - Free Online Graph Noise Editor">
+  <meta name="twitter:description" content="Create procedural textures and generative content online with Noise & TerrainGen.">
+  <meta name="twitter:image" content="img/og_image.png">
+
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.jpg">
+  <link rel="stylesheet" href="css/noiselab.css">
+</head>
+
+<body>
+
+  <!-- Wrap everything under a main container -->
+  <main id="main-container" style="display:flex; flex:1; height:100vh; overflow:hidden;">
+
+    <!-- Welcome Modal -->
+    <div id="welcomeModal" class="modal">
+      <div class="modal-content">
+        <h2>Welcome to Noise & TerrainGen!</h2>
+        <p>Noise & TerrainGen is a free online graph-based noise editor. Here's how to get started:</p>
+        <ul>
+          <li>Use the left panel to create or select your graphs.</li>
+          <li>Add nodes to your graph and connect them to generate procedural noise and textures. Right-click or
+            double-click to create new nodes.</li>
+          <li>Tweak node values to experiment with your creation in real time.</li>
+          <li>Enable <strong>Terrain mode</strong> to preview heightmaps.</li>
+        </ul>
+        <p>Everything you create is automatically stored locally in your browser. You can also export your graphs
+          anytime to save them permanently.</p>
+        <p>Have fun exploring and creating!</p>
+        <div style="text-align: center;">
+          <button id="closeWelcomeBtn">Got it!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Graph library sidebar -->
+    <aside id="graph-sidebar">
+      <div id="sidetitle">
+        <img src="img/complete-logo.png" alt="Noise & TerrainGen logo">
+      </div>
+      <button id="createGraphBtn"><i class="fas fa-plus"></i> Create New Graph</button>
+
+      <input type="text" id="graphSearch" placeholder="Search your graphs...">
+
+      <h4 class="section-title">Your Graphs</h4>
+      <div id="yourGraphsSection">
+        <ul id="yourGraphsList"></ul>
+      </div>
+
+      <div id="noiseLabInfo">
+        <div>Noise & TerrainGen is a node-based noise and terrain editing tool.</div>
+        <div class="line"><a href="" target="_blank">Made by Me</a></div>
+      </div>
+
+    </aside>
+
+    <!-- Main editor area -->
+    <section id="editor-area" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+      <div id="titlebar">
+        <span id="currentGraphName" contenteditable="true">Untitled</span>
+
+        <button id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+        <button id="importBtn"><i class="fas fa-file-import"></i> Import</button>
+
+        <label class="checkbox-container" title="Toggle Output Panel"><i class="fas fa-columns"></i> 3D Preview
+          <input type="checkbox" checked="checked" id="toggleOutputPanel">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="checkbox-container">Terrain mode
+          <input type="checkbox" checked="checked" id="terrain-mode">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+
+      <div id="content" style="flex:1; display:flex; overflow:hidden;">
+        <div id="graph-container"
+          style="flex:1; background:#111; display:flex; flex-direction:column; overflow:hidden;">
+          <canvas id="graph"></canvas>
+        </div>
+
+        <!-- Output Panel (right sidebar) -->
+        <aside id="output-panel">
+          <!-- Node Preview Canvas (moved from graph area) -->
+          <div id="canvas-container">
+            <canvas id="noiseCanvas" width="1024" height="1024"></canvas>
+          </div>
+
+          <!-- 3D Terrain Preview -->
+          <div id="terrain-3d-container">
+            <div class="terrain-placeholder">
+              <i class="fas fa-mountain" style="font-size:24px; margin-bottom:8px; opacity:0.3;"></i>
+              <span>Generate terrain from the Node Graph to view it here.</span>
+            </div>
+            <button id="terrain3dFullscreen" class="terrain-fullscreen-btn" title="Fullscreen">
+              <i class="fas fa-expand"></i>
+            </button>
+          </div>
+
+          <div id="output-maps-section">
+            <h4 class="output-maps-title">OUTPUT MAPS (2D)</h4>
+            <div id="output-maps-grid">
+              <div class="map-card">
+                <canvas id="mapHeightmap" width="256" height="256"></canvas>
+                <div class="map-card-label">Heightmap</div>
+                <button class="map-download-btn" data-map="heightmap" title="Download"><i
+                    class="fas fa-download"></i></button>
+              </div>
+              <div class="map-card">
+                <canvas id="mapNormalMap" width="256" height="256"></canvas>
+                <div class="map-card-label">Normal Map</div>
+                <button class="map-download-btn" data-map="normal" title="Download"><i
+                    class="fas fa-download"></i></button>
+              </div>
+              <div class="map-card">
+                <canvas id="mapSplatMap" width="256" height="256"></canvas>
+                <div class="map-card-label">Splat Map</div>
+                <button class="map-download-btn" data-map="splat" title="Download"><i
+                    class="fas fa-download"></i></button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <input type="file" id="fileInput" accept=".json" style="display:none">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <!-- LiteGraph -->
+  <link rel="stylesheet" href="css/external/litegraph.css">
+
+  <!-- Three.js (r128 — last stable release with non-module OrbitControls) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Simplex Noise -->
+  <script src="js/external/random.js"></script>
+  <script src="js/external/litegraph.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/nodes/shared.js"></script>
+  <script src="js/nodes/shader.js"></script>
+  <script src="js/nodes/combine.js"></script>
+  <script src="js/nodes/expression.js"></script>
+  <script src="js/nodes/filter.js"></script>
+  <script src="js/nodes/generator.js"></script>
+  <script src="js/nodes/math.js"></script>
+  <script src="js/nodes/transform.js"></script>
+  <script src="js/nodes/utility.js"></script>
+  <script src="js/examples.js"></script>
+  <script src="js/graphManager.js"></script>
+  <script src="js/terrainPreview.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

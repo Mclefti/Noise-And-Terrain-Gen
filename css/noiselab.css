@@ -1,0 +1,556 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top title bar */
+#titlebar, #sidetitle {
+  height: 50px;
+  background: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  font-size: 1.2em;
+  flex-shrink: 0;
+  user-select: none;
+}
+#titlebar span {
+  margin-left: 10px;
+}
+#titlebar img,
+#sidetitle img {
+  height: 30px;
+}
+
+#sidetitle {
+    margin: -10px;
+    margin-bottom: 10px;
+}
+
+/* Main content area */
+#content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Left panel (graph) */
+#graph-container {
+  flex: 1;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Node preview canvas (inside output panel) */
+#canvas-container {
+  width: calc(100% - 24px);
+  margin: 12px 12px 0 12px;
+  border: 1px solid #2a2a3a;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1;
+}
+
+/* LiteGraph canvas fills left panel */
+#graph {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Final noise canvas */
+#noiseCanvas {
+  border: 1px solid #555;
+}
+
+/* Checkbox*/
+.checkbox-container {
+  display: block;
+  position: relative;
+  padding-left: 45px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #b16f8f;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+#graph-sidebar {
+  width: 250px;
+  background: #222;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  flex-shrink: 0;
+  border-right: 2px solid #444;
+  overflow-y: auto;
+}
+
+#graph-sidebar .section-title {
+    color: #a1a1a1;
+    font-size: 14px;
+    font-weight: 100;
+    margin-bottom: 10px;
+}
+
+#graph-sidebar button {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#graph-sidebar button:hover {
+  background: #444;
+}
+
+#graph-sidebar input {
+  background: #111;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+#graph-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#graph-sidebar li {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#graph-sidebar li.selected {
+  background: #4c4c4c;
+}
+
+#graph-sidebar li:hover {
+  background: #333;
+}
+
+.graph-actions {
+  display: none;
+  gap: 5px;
+}
+
+#graph-sidebar li .graph-title {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#graph-sidebar li:hover .graph-actions {
+  display: flex;
+}
+
+#graph-sidebar .graph-actions button {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  margin-left: 2px;
+}
+
+#graph-sidebar .graph-actions button .fa-trash {
+    color: rgb(218, 126, 126);
+}
+
+#graph-sidebar .graph-actions button:hover {
+  color: #fff;
+}
+
+.pinned-icon {
+  margin-right: 10px;
+  color: #ac6f8f;
+}
+
+#exportBtn {
+  margin-left: auto;
+}
+
+#titlebar button {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#titlebar button:hover {
+  background: #444;
+}
+
+
+#yourGraphsSection {
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+#noiseLabInfo {
+    padding: 10px;
+    background: #373737;
+    font-size: 13px;
+    margin-top: auto;
+}
+
+#noiseLabInfo a {
+    color: #c8aaba;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+#noiseLabInfo a:hover {
+    color: #ac6f8f;
+}
+
+#noiseLabInfo .line {
+    margin-top: 0.5em;
+}
+
+
+/* Scrollbar, taken from W3C */
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
+/* Custom litegraph css*/
+.graphdialog:not(.litesearchbox) {
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.graphdialog .name {
+    color: white;
+}
+
+.graphdialog button.rounded {
+    border-radius: 2px;
+}
+
+
+/* Welcome Modal */
+.modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  background: #222;
+  color: #d7d7d7;
+  padding: 30px;
+  border-radius: 8px;
+  width: 600px;
+  max-width: 90%;
+  text-align: left;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #ce83aa;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+}
+
+.modal-content button {
+  margin-top: 15px;
+  background: #b16f8f;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.modal-content button:hover {
+  background: #bc8ca5;
+}
+
+.modal-content ul li {
+    margin-top: 8px;
+}
+
+
+/* ================================================================
+   Output Panel (right sidebar)
+   ================================================================ */
+
+#output-panel {
+    width: 380px;
+    min-width: 380px;
+    background: #16161e;
+    border-left: 1px solid #2a2a3a;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.3s ease, min-width 0.3s ease, opacity 0.3s ease;
+}
+
+#output-panel.collapsed {
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-left: none;
+}
+
+/* 3D Terrain Preview */
+#terrain-3d-container {
+    position: relative;
+    width: calc(100% - 24px);
+    height: 260px;
+    min-height: 260px;
+    background: #1a1a2e;
+    border: 1px solid #2a2a3a;
+    border-radius: 6px;
+    margin: 12px 12px 0 12px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.terrain-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 13px;
+    text-align: center;
+    padding: 20px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.terrain-fullscreen-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(30, 30, 48, 0.85);
+    color: #ccc;
+    border: 1px solid #3a3a5a;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 2;
+    transition: background 0.2s;
+}
+
+.terrain-fullscreen-btn:hover {
+    background: rgba(60, 60, 100, 0.9);
+    color: #fff;
+}
+
+#canvas-container canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    cursor: pointer;
+}
+
+/* Output Maps Section */
+#output-maps-section {
+    padding: 12px;
+}
+
+.output-maps-title {
+    color: #888;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 8px 0 12px 0;
+}
+
+#output-maps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.map-card {
+    position: relative;
+    background: #1e1e2e;
+    border: 1px dashed #3a3a5a;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.map-card:hover {
+    border-color: #6a6aaa;
+    transform: translateY(-2px);
+}
+
+.map-card canvas {
+    width: 100%;
+    aspect-ratio: 1;
+    display: block;
+    background: #1a1a28;
+}
+
+.map-card-label {
+    font-size: 11px;
+    color: #8a8aaa;
+    padding: 6px 0;
+    text-align: center;
+    width: 100%;
+    background: #1e1e2e;
+}
+
+.map-download-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(20, 20, 40, 0.8);
+    color: #aaa;
+    border: none;
+    padding: 3px 6px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.map-card:hover .map-download-btn {
+    opacity: 1;
+}
+
+.map-download-btn:hover {
+    color: #fff;
+    background: rgba(60, 60, 120, 0.9);
+}
+
+/* Toggle button style */
+#toggleOutputPanel {
+    margin-left: 4px;
+}
