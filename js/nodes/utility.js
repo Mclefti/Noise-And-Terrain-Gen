@@ -215,10 +215,13 @@ class GenerateTerrainNode extends NoiseNode {
         this.addInput("heightmap", "array");
         this.title = "Generate Terrain";
 
-        this.properties = { water: true };
+        this.properties = { resolution: "1024", water: true };
+        this.addWidget("combo", "Resolution", this.properties.resolution, (v) => {
+            this.properties.resolution = v;
+        }, { values: ["32", "64", "128", "256", "512", "1024", "2048", "4096"] });
         this.addWidget("toggle", "Water", true, { property: "water" });
 
-        this.size = [220, 130];
+        this.size = [220, 160];
         this._busy = false;
         this._status = "Ready";
         this._statusColor = "#888";
@@ -227,7 +230,7 @@ class GenerateTerrainNode extends NoiseNode {
     }
 
     computeSize() {
-        return [220, 130];
+        return [220, 160];
     }
 
     onExecute() {
@@ -240,7 +243,7 @@ class GenerateTerrainNode extends NoiseNode {
 
         // Force minimum size (prevents truncated UI if loading old graph JSON)
         if (this.size[0] < 220) this.size[0] = 220;
-        if (this.size[1] < 130) this.size[1] = 130;
+        if (this.size[1] < 160) this.size[1] = 160;
 
         const w = this.size[0];
 
@@ -248,11 +251,11 @@ class GenerateTerrainNode extends NoiseNode {
         ctx.fillStyle = this._statusColor;
         ctx.font = "11px sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(this._status, w / 2, 80);
+        ctx.fillText(this._status, w / 2, 110);
 
         // "Generate" button
         const btnX = 15;
-        const btnY = 90;
+        const btnY = 120;
         const btnW = w - 30;
         const btnH = 26;
 
@@ -275,7 +278,7 @@ class GenerateTerrainNode extends NoiseNode {
     onMouseDown(e, localPos) {
         // Check if click was on the button area
         const btnX = 15;
-        const btnY = 90;
+        const btnY = 120;
         const btnW = this.size[0] - 30;
         const btnH = 26;
 
@@ -289,20 +292,17 @@ class GenerateTerrainNode extends NoiseNode {
     async _generate() {
         if (this._busy) return;
 
-        let input = this.getInputData(0);
-        if (!input) {
+        let outputNodeId = null;
+        if (this.inputs[0] && this.inputs[0].link !== null) {
+            const linkId = this.inputs[0].link;
+            const link = this.graph.links[linkId];
+            if (link) {
+                outputNodeId = link.origin_id;
+            }
+        }
+
+        if (!outputNodeId) {
             this._status = "No input connected";
-            this._statusColor = "#f66";
-            return;
-        }
-
-        // Read GPU texture to CPU
-        if (input instanceof WebGLTexture) {
-            input = readTexture(input);
-        }
-
-        if (!input || input.length === 0) {
-            this._status = "Empty input";
             this._statusColor = "#f66";
             return;
         }
@@ -312,21 +312,16 @@ class GenerateTerrainNode extends NoiseNode {
         this._statusColor = "#a1dcdb";
 
         try {
-            // Encode float32 array to base64
-            const bytes = new Uint8Array(input.buffer, input.byteOffset, input.byteLength);
-            let binary = "";
-            for (let i = 0; i < bytes.length; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            const b64 = btoa(binary);
-
+            const resResolution = parseInt(this.properties.resolution) || 1024;
+            
             const payload = {
-                data: b64,
-                width: WIDTH,
-                height: HEIGHT
+                graph: this.graph.serialize(),
+                width: resResolution,
+                height: resResolution,
+                output_node_id: outputNodeId
             };
 
-            const res = await fetch("http://localhost:8080/compute_maps", {
+            const res = await fetch("http://localhost:8080/generate_terrain", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
@@ -338,17 +333,25 @@ class GenerateTerrainNode extends NoiseNode {
             }
 
             const data = await res.json();
+            
+            // Decode the returned base64 float32 string
+            const binaryStr = atob(data.data);
+            const bytes = new Uint8Array(binaryStr.length);
+            for (let i = 0; i < binaryStr.length; i++) {
+                bytes[i] = binaryStr.charCodeAt(i);
+            }
+            const floatArray = new Float32Array(bytes.buffer);
 
             // --- Populate the output panel ---
 
             // 1. Update 3D terrain preview
             if (typeof terrainPreview !== "undefined" && terrainPreview) {
-                terrainPreview.update(input, WIDTH, HEIGHT, this.properties.water);
+                terrainPreview.update(floatArray, resResolution, resResolution, this.properties.water);
             }
 
             // 2. Heightmap greyscale card
             if (typeof drawHeightmapOnCanvas === "function") {
-                drawHeightmapOnCanvas("mapHeightmap", input, WIDTH, HEIGHT);
+                drawHeightmapOnCanvas("mapHeightmap", floatArray, resResolution, resResolution);
             }
 
             // 3. Normal map card
@@ -363,7 +366,7 @@ class GenerateTerrainNode extends NoiseNode {
 
             // 5. Also update the main preview canvas
             if (typeof renderServerOutput === "function") {
-                renderServerOutput(input, WIDTH, HEIGHT);
+                renderServerOutput(floatArray, resResolution, resResolution);
             }
 
             // 6. Show output panel if hidden

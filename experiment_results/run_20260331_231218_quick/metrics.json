@@ -1,0 +1,150 @@
+{
+  "experiment": "Wave-Harmonic Terrain Generation \u2014 Experimental Validation",
+  "parameters": {
+    "noise_type": "perlin",
+    "frequency": 5.0,
+    "octaves": 6,
+    "persistence": 0.5,
+    "lacunarity": 2.0,
+    "wave_intensity": 0.3,
+    "wave_count": 8,
+    "erosion_iterations": 10,
+    "talus_angle": 0.05,
+    "thermal_rate": 0.5
+  },
+  "performance": {
+    "256": {
+      "A_raw_noise": {
+        "mean_latency_ms": 41.73166000000492,
+        "std_latency_ms": 3.115187545157232,
+        "peak_memory_mb": 6.753557205200195,
+        "n_samples": 5,
+        "throughput_mpps": 1.5704144047946398
+      },
+      "B_fbm": {
+        "mean_latency_ms": 254.71034000001964,
+        "std_latency_ms": 25.626333522943703,
+        "peak_memory_mb": 6.753381729125977,
+        "n_samples": 5,
+        "throughput_mpps": 0.2572961898601955
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 287.079199999971,
+        "std_latency_ms": 11.163407352509365,
+        "peak_memory_mb": 9.067307472229004,
+        "n_samples": 5,
+        "throughput_mpps": 0.22828543482079727
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 244.70015999995667,
+        "std_latency_ms": 4.677543705272261,
+        "peak_memory_mb": 6.753381729125977,
+        "n_samples": 5,
+        "throughput_mpps": 0.267821647521651
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 302.5554200001352,
+        "std_latency_ms": 10.019232143158854,
+        "peak_memory_mb": 9.567806243896484,
+        "n_samples": 5,
+        "throughput_mpps": 0.2166082498207129
+      }
+    }
+  },
+  "structural": {
+    "A_raw_noise": {
+      "mean_spectral_slope": -2.872990995552954,
+      "std_spectral_slope": 0.018596311703104457,
+      "mean_roughness": 0.0002080290820231312,
+      "std_roughness": 7.003867120932666e-06,
+      "mean_regional_diff": 1.3649230671637245e-05,
+      "n_samples": 5
+    },
+    "B_fbm": {
+      "mean_spectral_slope": -3.1127099899167723,
+      "std_spectral_slope": 0.06961008031719157,
+      "mean_roughness": 0.005444241486111423,
+      "std_roughness": 4.234182338784847e-05,
+      "mean_regional_diff": -1.40742851974315e-05,
+      "n_samples": 5
+    },
+    "C_fbm_eroded": {
+      "mean_spectral_slope": -3.1127099899167723,
+      "std_spectral_slope": 0.06961008031719157,
+      "mean_roughness": 0.005444241486111423,
+      "std_roughness": 4.234182338784847e-05,
+      "mean_regional_diff": -1.40742851974315e-05,
+      "n_samples": 5
+    },
+    "D_wave_harmonic_no_erode": {
+      "mean_spectral_slope": -3.09140925726838,
+      "std_spectral_slope": 0.06893378532400898,
+      "mean_roughness": 0.006861223284418294,
+      "std_roughness": 0.0012074533506443816,
+      "mean_regional_diff": 0.0011368219188737385,
+      "n_samples": 5
+    },
+    "E_wave_harmonic_full": {
+      "mean_spectral_slope": -3.0913561961720584,
+      "std_spectral_slope": 0.06878957915046567,
+      "mean_roughness": 0.006855999246895728,
+      "std_roughness": 0.0012014287232770184,
+      "mean_regional_diff": 0.0011242293768531039,
+      "n_samples": 5
+    }
+  },
+  "statistics": {
+    "performance": {
+      "latency_BvsE_256x256": {
+        "t_statistic": -3.588391927957094,
+        "p_value": 0.02299477837319647,
+        "significant": true,
+        "test_used": "paired_t_test"
+      }
+    },
+    "structural": {
+      "slope_B_fbm_vs_D_wave_harmonic_no_erode": {
+        "baseline_mean_slope": -3.1127099899167723,
+        "baseline_std_slope": 0.06961008031719157,
+        "enhanced_mean_slope": -3.09140925726838,
+        "enhanced_std_slope": 0.06893378532400898,
+        "w_statistic": 3.0,
+        "p_value": 0.3125,
+        "significant": false,
+        "test_used": "wilcoxon"
+      },
+      "slope_B_fbm_vs_E_wave_harmonic_full": {
+        "baseline_mean_slope": -3.1127099899167723,
+        "baseline_std_slope": 0.06961008031719157,
+        "enhanced_mean_slope": -3.0913561961720584,
+        "enhanced_std_slope": 0.06878957915046567,
+        "w_statistic": 3.0,
+        "p_value": 0.3125,
+        "significant": false,
+        "test_used": "wilcoxon"
+      },
+      "slope_C_fbm_eroded_vs_E_wave_harmonic_full": {
+        "baseline_mean_slope": -3.1127099899167723,
+        "baseline_std_slope": 0.06961008031719157,
+        "enhanced_mean_slope": -3.0913561961720584,
+        "enhanced_std_slope": 0.06878957915046567,
+        "w_statistic": 3.0,
+        "p_value": 0.3125,
+        "significant": false,
+        "test_used": "wilcoxon"
+      },
+      "roughness_differential_D_wave_harmonic_no_erode": {
+        "t_statistic": 2.507444250553707,
+        "p_value": 0.0662377914504026,
+        "significant": false,
+        "mean_diff": 0.0011368219188737385
+      },
+      "roughness_differential_E_wave_harmonic_full": {
+        "t_statistic": 2.493314108107101,
+        "p_value": 0.06724554203270149,
+        "significant": false,
+        "mean_diff": 0.0011242293768531039
+      }
+    }
+  }
+}

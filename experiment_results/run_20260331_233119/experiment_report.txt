@@ -1,0 +1,451 @@
+========================================================================
+  WAVE-HARMONIC TERRAIN GENERATION
+  Experimental Validation Report
+========================================================================
+
+  Generated:  2026-03-31 23:57:17
+
+------------------------------------------------------------------------
+  1.  PIPELINE PARAMETERS
+------------------------------------------------------------------------
+
+  Noise Algorithm    : Perlin
+  Base Frequency     : 5.0
+  Octaves (k)        : 6
+  Persistence (a)    : 0.5
+  Lacunarity (f)     : 2.0
+  Wave Intensity (α) : 0.3
+  Wave Count (N)     : 8
+  Erosion Iterations : 10
+  Talus Angle (T)    : 0.05
+  Thermal Rate (Kr)  : 0.5
+
+------------------------------------------------------------------------
+  2.  PIPELINE DESCRIPTIONS
+------------------------------------------------------------------------
+
+  #     Pipeline                            Description                                         
+  ----------------------------------------------------------------------------------------------
+  A     Raw Noise Baseline                  Single-octave noise (no fBm, no waves, no erosion)  
+  B     Standard Enhancement (fBm)          Fractal Brownian Motion only (Phase I)              
+  C     Standard Enhancement + Erosion      fBm + Thermal Erosion (Phases I + IV)               
+  D     Wave-Harmonic (no erosion)          fBm + Wave Enhancement + Covariant Curvature (Phases I-III)
+  E     Wave-Harmonic (full)                Full 4-phase method (Phases I-IV)                   
+
+------------------------------------------------------------------------
+  3.  PERFORMANCE BENCHMARKING
+------------------------------------------------------------------------
+
+  Resolution: 32 x 32
+
+  Pipeline                                  μ (ms)        σ (ms)        Mem (MB)    Th (MP/s)   
+  ----------------------------------------------------------------------------------------------
+  A — Raw Noise                                   0.79          0.22         0.1        1.30    
+  B — fBm Standard                                4.89          1.56         0.1        0.21    
+  C — fBm + Erosion                               5.93          1.10         0.1        0.17    
+  D — Wave-Harmonic (no erosion)                  4.40          0.51         0.1        0.23    
+  E — Wave-Harmonic (full)                        6.08          1.04         0.2        0.17    
+
+  Resolution: 64 x 64
+
+  Pipeline                                  μ (ms)        σ (ms)        Mem (MB)    Th (MP/s)   
+  ----------------------------------------------------------------------------------------------
+  A — Raw Noise                                   2.27          0.25         0.4        1.80    
+  B — fBm Standard                               13.33          1.19         0.4        0.31    
+  C — fBm + Erosion                              18.48          3.20         0.6        0.22    
+  D — Wave-Harmonic (no erosion)                 13.75          0.34         0.4        0.30    
+  E — Wave-Harmonic (full)                       16.49          0.42         0.6        0.25    
+
+  Resolution: 128 x 128
+
+  Pipeline                                  μ (ms)        σ (ms)        Mem (MB)    Th (MP/s)   
+  ----------------------------------------------------------------------------------------------
+  A — Raw Noise                                   8.73          0.54         1.7        1.88    
+  B — fBm Standard                               53.44         10.08         1.7        0.31    
+  C — fBm + Erosion                              59.07          0.88         2.3        0.28    
+  D — Wave-Harmonic (no erosion)                 52.01          1.32         1.7        0.32    
+  E — Wave-Harmonic (full)                       62.13          2.03         2.4        0.26    
+
+  Resolution: 256 x 256
+
+  Pipeline                                  μ (ms)        σ (ms)        Mem (MB)    Th (MP/s)   
+  ----------------------------------------------------------------------------------------------
+  A — Raw Noise                                  36.08          1.66         6.8        1.82    
+  B — fBm Standard                              216.69          6.98         6.8        0.30    
+  C — fBm + Erosion                             258.44         20.19         9.1        0.25    
+  D — Wave-Harmonic (no erosion)                222.24          4.34         6.8        0.29    
+  E — Wave-Harmonic (full)                      253.12         10.76         9.6        0.26    
+
+  Resolution: 512 x 512
+
+  Pipeline                                  μ (ms)        σ (ms)        Mem (MB)    Th (MP/s)   
+  ----------------------------------------------------------------------------------------------
+  A — Raw Noise                                 165.64          5.36        27.0        1.58    
+  B — fBm Standard                              981.23         27.90        27.0        0.27    
+  C — fBm + Erosion                            1282.34         40.51        36.3        0.20    
+  D — Wave-Harmonic (no erosion)               1124.48         57.77        27.0        0.23    
+  E — Wave-Harmonic (full)                     1402.52         51.07        38.3        0.19    
+
+  Resolution: 1024 x 1024
+
+  Pipeline                                  μ (ms)        σ (ms)        Mem (MB)    Th (MP/s)   
+  ----------------------------------------------------------------------------------------------
+  A — Raw Noise                                 716.49         31.01       108.0        1.46    
+  B — fBm Standard                             3997.41        130.98       108.0        0.26    
+  C — fBm + Erosion                            4760.36        224.56       145.0        0.22    
+  D — Wave-Harmonic (no erosion)               4053.21         59.78       108.0        0.26    
+  E — Wave-Harmonic (full)                     4809.54         64.63       153.0        0.22    
+
+------------------------------------------------------------------------
+  4.  STRUCTURAL ANALYSIS
+------------------------------------------------------------------------
+
+  4.1  Spectral Slope (β) — Linear regression on log-log PSD
+
+  Pipeline                                  Mean β        Std β         N         
+  --------------------------------------------------------------------------------
+  A — Raw Noise                                -2.8514        0.0327        50    
+  B — fBm Standard                             -3.0676        0.1180        50    
+  C — fBm + Erosion                            -3.0676        0.1180        50    
+  D — Wave-Harmonic (no erosion)               -3.0828        0.1012        50    
+  E — Wave-Harmonic (full)                     -3.0828        0.1012        50    
+
+  4.2  Roughness Index — Mean absolute Laplacian
+
+  Pipeline                                  Mean          Std           
+  ----------------------------------------------------------------------
+  A — Raw Noise                               0.000053      0.000002    
+  B — fBm Standard                            0.001544      0.000007    
+  C — fBm + Erosion                           0.001544      0.000007    
+  D — Wave-Harmonic (no erosion)              0.001977      0.000262    
+  E — Wave-Harmonic (full)                    0.001977      0.000262    
+
+  4.3  Regional Roughness Differential (high − low elevation)
+       Positive = rougher peaks, smoother valleys (validates P·ψ masking)
+
+  Pipeline                                  Mean Δ Roughness  
+  ------------------------------------------------------------
+  A — Raw Noise                                  -0.000000    
+  B — fBm Standard                               +0.000000    
+  C — fBm + Erosion                              +0.000000    
+  D — Wave-Harmonic (no erosion)                 +0.000376    
+  E — Wave-Harmonic (full)                       +0.000376    
+
+------------------------------------------------------------------------
+  5.  STATISTICAL VALIDATION
+------------------------------------------------------------------------
+
+  5.1  Performance Comparisons (B vs E)
+
+  Comparison                    p-value       Signif.     Test Used       
+  ------------------------------------------------------------------------
+  latency_BvsE_32x32                0.0000       ✓ YES        wilcoxon    
+  latency_BvsE_64x64                0.0000       ✓ YES        wilcoxon    
+  latency_BvsE_128x128              0.0000       ✓ YES        wilcoxon    
+  latency_BvsE_256x256              0.0000       ✓ YES        wilcoxon    
+  latency_BvsE_512x512              0.0000       ✓ YES        wilcoxon    
+  latency_BvsE_1024x1024            0.0000       ✓ YES        wilcoxon    
+
+  5.2  Spectral Slope Comparisons
+
+  slope_B_fbm_vs_D_wave_harmonic_no_erode:
+    Baseline  β = -3.0676 ± 0.1180
+    Enhanced  β = -3.0828 ± 0.1012
+    p-value     = 0.0339  (✓ Significant)  [paired_t_test]
+
+  slope_B_fbm_vs_E_wave_harmonic_full:
+    Baseline  β = -3.0676 ± 0.1180
+    Enhanced  β = -3.0828 ± 0.1012
+    p-value     = 0.0339  (✓ Significant)  [paired_t_test]
+
+  slope_C_fbm_eroded_vs_E_wave_harmonic_full:
+    Baseline  β = -3.0676 ± 0.1180
+    Enhanced  β = -3.0828 ± 0.1012
+    p-value     = 0.0339  (✓ Significant)  [paired_t_test]
+
+  5.3  Regional Roughness Differential Tests
+       H₀: mean differential = 0  (no difference between high/low regions)
+
+  Pipeline                                          p-value       Signif.     
+  ----------------------------------------------------------------------------
+  D — Wave-Harmonic (no erosion)                        0.0000       ✓ YES    
+  E — Wave-Harmonic (full)                              0.0000       ✓ YES    
+
+------------------------------------------------------------------------
+  6.  OUTPUT FILE MANIFEST
+------------------------------------------------------------------------
+
+  Root: E:\Projects\Noise And Terrain Gen\experiment_results\run_20260331_233119
+
+    run_20260331_233119/
+      metrics.json  (12.2 KB)
+      node_parameters.json  (0.9 KB)
+      figures/
+        step1_demo_comparison.png  (1441.7 KB)
+        step4_psd_comparison.png  (121.0 KB)
+        step4_roughness_differential.png  (62.8 KB)
+        step4_spectral_slopes.png  (74.3 KB)
+        step6_latency_comparison.png  (58.2 KB)
+        step6_throughput_comparison.png  (56.5 KB)
+      heightmaps/
+        demo/
+          A_raw_noise_seed42.npy  (4096.1 KB)
+          B_fbm_seed42.npy  (4096.1 KB)
+          C_fbm_eroded_seed42.npy  (4096.1 KB)
+          D_wave_harmonic_no_erode_seed42.npy  (4096.1 KB)
+          E_wave_harmonic_full_seed42.npy  (4096.1 KB)
+        paired/
+          A_raw_noise_seed001.npy  (1024.1 KB)
+          A_raw_noise_seed002.npy  (1024.1 KB)
+          A_raw_noise_seed003.npy  (1024.1 KB)
+          A_raw_noise_seed004.npy  (1024.1 KB)
+          A_raw_noise_seed005.npy  (1024.1 KB)
+          A_raw_noise_seed006.npy  (1024.1 KB)
+          A_raw_noise_seed007.npy  (1024.1 KB)
+          A_raw_noise_seed008.npy  (1024.1 KB)
+          A_raw_noise_seed009.npy  (1024.1 KB)
+          A_raw_noise_seed010.npy  (1024.1 KB)
+          A_raw_noise_seed011.npy  (1024.1 KB)
+          A_raw_noise_seed012.npy  (1024.1 KB)
+          A_raw_noise_seed013.npy  (1024.1 KB)
+          A_raw_noise_seed014.npy  (1024.1 KB)
+          A_raw_noise_seed015.npy  (1024.1 KB)
+          A_raw_noise_seed016.npy  (1024.1 KB)
+          A_raw_noise_seed017.npy  (1024.1 KB)
+          A_raw_noise_seed018.npy  (1024.1 KB)
+          A_raw_noise_seed019.npy  (1024.1 KB)
+          A_raw_noise_seed020.npy  (1024.1 KB)
+          A_raw_noise_seed021.npy  (1024.1 KB)
+          A_raw_noise_seed022.npy  (1024.1 KB)
+          A_raw_noise_seed023.npy  (1024.1 KB)
+          A_raw_noise_seed024.npy  (1024.1 KB)
+          A_raw_noise_seed025.npy  (1024.1 KB)
+          A_raw_noise_seed026.npy  (1024.1 KB)
+          A_raw_noise_seed027.npy  (1024.1 KB)
+          A_raw_noise_seed028.npy  (1024.1 KB)
+          A_raw_noise_seed029.npy  (1024.1 KB)
+          A_raw_noise_seed030.npy  (1024.1 KB)
+          A_raw_noise_seed031.npy  (1024.1 KB)
+          A_raw_noise_seed032.npy  (1024.1 KB)
+          A_raw_noise_seed033.npy  (1024.1 KB)
+          A_raw_noise_seed034.npy  (1024.1 KB)
+          A_raw_noise_seed035.npy  (1024.1 KB)
+          A_raw_noise_seed036.npy  (1024.1 KB)
+          A_raw_noise_seed037.npy  (1024.1 KB)
+          A_raw_noise_seed038.npy  (1024.1 KB)
+          A_raw_noise_seed039.npy  (1024.1 KB)
+          A_raw_noise_seed040.npy  (1024.1 KB)
+          A_raw_noise_seed041.npy  (1024.1 KB)
+          A_raw_noise_seed042.npy  (1024.1 KB)
+          A_raw_noise_seed043.npy  (1024.1 KB)
+          A_raw_noise_seed044.npy  (1024.1 KB)
+          A_raw_noise_seed045.npy  (1024.1 KB)
+          A_raw_noise_seed046.npy  (1024.1 KB)
+          A_raw_noise_seed047.npy  (1024.1 KB)
+          A_raw_noise_seed048.npy  (1024.1 KB)
+          A_raw_noise_seed049.npy  (1024.1 KB)
+          A_raw_noise_seed050.npy  (1024.1 KB)
+          B_fbm_seed001.npy  (1024.1 KB)
+          B_fbm_seed002.npy  (1024.1 KB)
+          B_fbm_seed003.npy  (1024.1 KB)
+          B_fbm_seed004.npy  (1024.1 KB)
+          B_fbm_seed005.npy  (1024.1 KB)
+          B_fbm_seed006.npy  (1024.1 KB)
+          B_fbm_seed007.npy  (1024.1 KB)
+          B_fbm_seed008.npy  (1024.1 KB)
+          B_fbm_seed009.npy  (1024.1 KB)
+          B_fbm_seed010.npy  (1024.1 KB)
+          B_fbm_seed011.npy  (1024.1 KB)
+          B_fbm_seed012.npy  (1024.1 KB)
+          B_fbm_seed013.npy  (1024.1 KB)
+          B_fbm_seed014.npy  (1024.1 KB)
+          B_fbm_seed015.npy  (1024.1 KB)
+          B_fbm_seed016.npy  (1024.1 KB)
+          B_fbm_seed017.npy  (1024.1 KB)
+          B_fbm_seed018.npy  (1024.1 KB)
+          B_fbm_seed019.npy  (1024.1 KB)
+          B_fbm_seed020.npy  (1024.1 KB)
+          B_fbm_seed021.npy  (1024.1 KB)
+          B_fbm_seed022.npy  (1024.1 KB)
+          B_fbm_seed023.npy  (1024.1 KB)
+          B_fbm_seed024.npy  (1024.1 KB)
+          B_fbm_seed025.npy  (1024.1 KB)
+          B_fbm_seed026.npy  (1024.1 KB)
+          B_fbm_seed027.npy  (1024.1 KB)
+          B_fbm_seed028.npy  (1024.1 KB)
+          B_fbm_seed029.npy  (1024.1 KB)
+          B_fbm_seed030.npy  (1024.1 KB)
+          B_fbm_seed031.npy  (1024.1 KB)
+          B_fbm_seed032.npy  (1024.1 KB)
+          B_fbm_seed033.npy  (1024.1 KB)
+          B_fbm_seed034.npy  (1024.1 KB)
+          B_fbm_seed035.npy  (1024.1 KB)
+          B_fbm_seed036.npy  (1024.1 KB)
+          B_fbm_seed037.npy  (1024.1 KB)
+          B_fbm_seed038.npy  (1024.1 KB)
+          B_fbm_seed039.npy  (1024.1 KB)
+          B_fbm_seed040.npy  (1024.1 KB)
+          B_fbm_seed041.npy  (1024.1 KB)
+          B_fbm_seed042.npy  (1024.1 KB)
+          B_fbm_seed043.npy  (1024.1 KB)
+          B_fbm_seed044.npy  (1024.1 KB)
+          B_fbm_seed045.npy  (1024.1 KB)
+          B_fbm_seed046.npy  (1024.1 KB)
+          B_fbm_seed047.npy  (1024.1 KB)
+          B_fbm_seed048.npy  (1024.1 KB)
+          B_fbm_seed049.npy  (1024.1 KB)
+          B_fbm_seed050.npy  (1024.1 KB)
+          C_fbm_eroded_seed001.npy  (1024.1 KB)
+          C_fbm_eroded_seed002.npy  (1024.1 KB)
+          C_fbm_eroded_seed003.npy  (1024.1 KB)
+          C_fbm_eroded_seed004.npy  (1024.1 KB)
+          C_fbm_eroded_seed005.npy  (1024.1 KB)
+          C_fbm_eroded_seed006.npy  (1024.1 KB)
+          C_fbm_eroded_seed007.npy  (1024.1 KB)
+          C_fbm_eroded_seed008.npy  (1024.1 KB)
+          C_fbm_eroded_seed009.npy  (1024.1 KB)
+          C_fbm_eroded_seed010.npy  (1024.1 KB)
+          C_fbm_eroded_seed011.npy  (1024.1 KB)
+          C_fbm_eroded_seed012.npy  (1024.1 KB)
+          C_fbm_eroded_seed013.npy  (1024.1 KB)
+          C_fbm_eroded_seed014.npy  (1024.1 KB)
+          C_fbm_eroded_seed015.npy  (1024.1 KB)
+          C_fbm_eroded_seed016.npy  (1024.1 KB)
+          C_fbm_eroded_seed017.npy  (1024.1 KB)
+          C_fbm_eroded_seed018.npy  (1024.1 KB)
+          C_fbm_eroded_seed019.npy  (1024.1 KB)
+          C_fbm_eroded_seed020.npy  (1024.1 KB)
+          C_fbm_eroded_seed021.npy  (1024.1 KB)
+          C_fbm_eroded_seed022.npy  (1024.1 KB)
+          C_fbm_eroded_seed023.npy  (1024.1 KB)
+          C_fbm_eroded_seed024.npy  (1024.1 KB)
+          C_fbm_eroded_seed025.npy  (1024.1 KB)
+          C_fbm_eroded_seed026.npy  (1024.1 KB)
+          C_fbm_eroded_seed027.npy  (1024.1 KB)
+          C_fbm_eroded_seed028.npy  (1024.1 KB)
+          C_fbm_eroded_seed029.npy  (1024.1 KB)
+          C_fbm_eroded_seed030.npy  (1024.1 KB)
+          C_fbm_eroded_seed031.npy  (1024.1 KB)
+          C_fbm_eroded_seed032.npy  (1024.1 KB)
+          C_fbm_eroded_seed033.npy  (1024.1 KB)
+          C_fbm_eroded_seed034.npy  (1024.1 KB)
+          C_fbm_eroded_seed035.npy  (1024.1 KB)
+          C_fbm_eroded_seed036.npy  (1024.1 KB)
+          C_fbm_eroded_seed037.npy  (1024.1 KB)
+          C_fbm_eroded_seed038.npy  (1024.1 KB)
+          C_fbm_eroded_seed039.npy  (1024.1 KB)
+          C_fbm_eroded_seed040.npy  (1024.1 KB)
+          C_fbm_eroded_seed041.npy  (1024.1 KB)
+          C_fbm_eroded_seed042.npy  (1024.1 KB)
+          C_fbm_eroded_seed043.npy  (1024.1 KB)
+          C_fbm_eroded_seed044.npy  (1024.1 KB)
+          C_fbm_eroded_seed045.npy  (1024.1 KB)
+          C_fbm_eroded_seed046.npy  (1024.1 KB)
+          C_fbm_eroded_seed047.npy  (1024.1 KB)
+          C_fbm_eroded_seed048.npy  (1024.1 KB)
+          C_fbm_eroded_seed049.npy  (1024.1 KB)
+          C_fbm_eroded_seed050.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed001.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed002.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed003.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed004.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed005.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed006.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed007.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed008.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed009.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed010.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed011.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed012.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed013.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed014.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed015.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed016.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed017.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed018.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed019.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed020.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed021.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed022.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed023.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed024.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed025.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed026.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed027.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed028.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed029.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed030.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed031.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed032.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed033.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed034.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed035.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed036.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed037.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed038.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed039.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed040.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed041.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed042.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed043.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed044.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed045.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed046.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed047.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed048.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed049.npy  (1024.1 KB)
+          D_wave_harmonic_no_erode_seed050.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed001.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed002.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed003.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed004.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed005.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed006.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed007.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed008.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed009.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed010.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed011.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed012.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed013.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed014.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed015.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed016.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed017.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed018.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed019.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed020.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed021.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed022.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed023.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed024.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed025.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed026.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed027.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed028.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed029.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed030.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed031.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed032.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed033.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed034.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed035.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed036.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed037.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed038.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed039.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed040.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed041.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed042.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed043.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed044.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed045.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed046.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed047.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed048.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed049.npy  (1024.1 KB)
+          E_wave_harmonic_full_seed050.npy  (1024.1 KB)
+
+========================================================================
+  END OF REPORT
+========================================================================

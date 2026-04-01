@@ -19,13 +19,13 @@ class NodeDef(BaseModel):
 
 class GraphDef(BaseModel):
     nodes: list[NodeDef]
-    # Each link: [link_id, src_node_id, src_slot, dst_node_id, dst_slot]
-    links: list[list[int]] = Field(default_factory=list)
+    # Each link: [link_id, src_node_id, src_slot, dst_node_id, dst_slot, type]
+    links: list[list[Any]] = Field(default_factory=list)
 
 
 class GenerateTerrainRequest(BaseModel):
-    width: int = Field(default=1024, ge=64, le=4096)
-    height: int = Field(default=1024, ge=64, le=4096)
+    width: int = Field(default=1024, ge=32, le=4096)
+    height: int = Field(default=1024, ge=32, le=4096)
     graph: GraphDef
     # Optional: explicitly name the output node id; if absent, uses the last node in topo order
     output_node_id: int | None = None
@@ -52,8 +52,8 @@ class ComputeMapsRequest(BaseModel):
     and returns derived maps (normal, splat).
     """
     data: str          # base64 float32 binary (heightmap)
-    width: int = Field(ge=64, le=4096)
-    height: int = Field(ge=64, le=4096)
+    width: int = Field(ge=32, le=4096)
+    height: int = Field(ge=32, le=4096)
 
 
 class ComputeMapsResponse(BaseModel):

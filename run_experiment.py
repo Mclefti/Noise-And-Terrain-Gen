@@ -427,36 +427,38 @@ def step6_save_report(out_dir: str, perf_data: dict, structural_data: dict,
         json.dump(report, f, indent=2)
     print(f"  → Saved metrics report to metrics.json")
 
-    # Map pipeline parameters to UI node parameters
+    # Map pipeline parameters to UI node parameters for reproduction
     node_params = {
-        "Phase I (Base Noise Node)": {
-            "type": f"{params.noise_type}_noise",
+        "Phase I (Perlin Noise Node)": {
+            "type": "Generator/Perlin",
             "properties": {
-                "octaves": params.octaves,
-                "persistence": params.persistence,
-                "lacunarity": params.lacunarity,
-                "frequency": params.frequency,
-                "seed": "42 (example)"
+                "Frequency": params.frequency,
+                "Octaves": params.octaves,
+                "Amplitude": 1.0,  # Default starting amplitude
+                "Offset": 0.0,
+                "Seed": "42 (example)"
             }
         },
-        "Phase II (Wave Node Equivalent)": {
-            "type": "wave_interference",
+        "Phase II (Wave Interference Node)": {
+            "type": "Generator/Wave Interference",
             "properties": {
-                "wave_count": params.wave_count,
-                "wave_intensity (alpha)": params.wave_intensity,
-                "note": "Directions and phases are deterministically pseudo-randomized from the base seed."
+                "Frequency": 2.0,  # Recommended spectral coupling frequency
+                "Sources": params.wave_count,
+                "Phase": 0.0,
+                "Decay": 0.0,
+                "Seed": "Derived from base seed"
             }
         },
-        "Phase III (Combination Logic)": {
-            "type": "math_ops / contextual_scale",
-            "formula": "H = P + P * psi"
+        "Phase III (Covariant Curvature Logic)": {
+            "type": "Combine/Covariant Curvature",
+            "formula": "H = P + (P * W * cos(P * PI)) * 0.4",
+            "note": "This node uses the base (P) to mask the wave (W) based on curvature."
         },
         "Phase IV (Thermal Erosion Node)": {
-            "type": "thermal_erosion",
+            "type": "Filter/Thermal Erosion",
             "properties": {
-                "iterations": params.erosion_iterations,
-                "repose_angle (T)": params.talus_angle,
-                "rate (Kr)": params.thermal_rate
+                "Iterations": params.erosion_iterations,
+                "Erosion Rate": params.thermal_rate
             }
         }
     }
@@ -572,7 +574,7 @@ def _write_text_report(out_dir: str, json_report: dict,
         ("A", "Raw Noise Baseline",          "Single-octave noise (no fBm, no waves, no erosion)"),
         ("B", "Standard Enhancement (fBm)",  "Fractal Brownian Motion only (Phase I)"),
         ("C", "Standard Enhancement + Erosion", "fBm + Thermal Erosion (Phases I + IV)"),
-        ("D", "Wave-Harmonic (no erosion)",   "fBm + Wave Enhancement + Contextual Scale (Phases I-III)"),
+        ("D", "Wave-Harmonic (no erosion)",   "fBm + Wave Enhancement + Covariant Curvature (Phases I-III)"),
         ("E", "Wave-Harmonic (full)",         "Full 4-phase method (Phases I-IV)"),
     ]
     cw = [6, 36, 52]
@@ -772,7 +774,7 @@ def main():
         paired_N = 512
         n_seeds = 50
         n_perf_samples = 50
-        resolutions = [256, 512, 1024, 2048]
+        resolutions = [32, 64, 128, 256, 512, 1024]
 
     params = PipelineParams(noise_type=args.noise)
     timestamp = time.strftime('%Y%m%d_%H%M%S')

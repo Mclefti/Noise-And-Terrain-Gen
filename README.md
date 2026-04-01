@@ -124,22 +124,20 @@ Noise & TerrainGen includes a rigorous command-line benchmarking and statistical
 To verify the experimental pipeline and generate a quick demonstration at 256×256 resolution:
 
 ```bash
-cd server
 python run_experiment.py --quick
 ```
 
 ### Full Benchmark Suite
 
-To run the complete paired-comparison framework (4 spatial resolutions from 256 to 2048, 50 distinct base seeds, 50 performance samples per pipeline), simply run:
+To run the complete paired-comparison framework (4 spatial resolutions from 256 to 1024, 50 distinct base seeds, 50 performance samples per pipeline), simply run:
 
 ```bash
-cd server
 python run_experiment.py
 ```
 
 ### Output
 
-The runner will automatically isolate and save all results to a new timestamped directory under `server/experiment_results/run_YYYYMMDD_HHMMSS/` containing:
+The runner will automatically isolate and save all results to a new timestamped directory under `experiment_results/run_YYYYMMDD_HHMMSS/` containing:
 - `experiment_report.txt` — Human-readable tables of parameters, latency, memory, throughput, structural indices, and p-values.
 - `metrics.json` — Exhaustive structural and performance analysis for programmatic integration.
 - `node_parameters.json` — A direct mapping to reproduce the tested algorithmic phases in the graphical graph editor.

@@ -10,7 +10,7 @@ Pipelines
 A  raw_noise_baseline        — single-octave noise (no fBm, no waves, no erosion)
 B  fbm_baseline              — fBm only (Equation 1)
 C  fbm_eroded_baseline       — fBm + Thermal Erosion (Equations 1 + 4)
-D  wave_harmonic_no_erosion  — fBm + Wave Enhancement + Contextual Scale (Eq. 1-3)
+D  wave_harmonic_no_erosion  — fBm + Wave Enhancement + Covariant Curvature (Eq. 1-3)
 E  wave_harmonic_pipeline    — Full 4-phase (Equations 1-4)
 
 All pipelines share the same `generate_base_noise()` for Phase I to guarantee
@@ -26,6 +26,8 @@ import numpy as np
 
 from core.generators import _make_uv, _perlin2d, _simplex2d
 from core.filters import thermal_erosion
+from core.math_ops import covariant_curvature
+
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +147,7 @@ def generate_wave_offset(
 
 
 # ---------------------------------------------------------------------------
-# Phase III — Combination Logic / Contextual Scaling (Equation 3)
+# Phase III — Combination Logic / Covariant Curvature (Equation 3)
 # ---------------------------------------------------------------------------
 
 def combine_contextual(
@@ -153,13 +155,21 @@ def combine_contextual(
     psi: np.ndarray,
 ) -> np.ndarray:
     """
-    H_final(x,y) = P(x,y) + P(x,y) · ψ(x,y)
+    H_final(x,y) = P(x,y) + sin(π * (P - ψ)) * (P · ψ)
 
-    The multiplicative term P·ψ ensures that wave distortions scale with
-    elevation: maximising jagged peaks (P≈1) while preserving smooth
-    valleys (P≈0).
+    The 'topological friction' term generates interference ridges based on the 
+    phase difference between the base noise and wave field.
     """
-    return (P + P * psi).astype(np.float32)
+    out = covariant_curvature(P, psi)
+
+    # Normalise results for experimental parity
+    _min, _max = out.min(), out.max()
+    if _max > _min:
+        out = (out - _min) / (_max - _min)
+    else:
+        out = np.clip(out, 0.0, 1.0)
+    return out.astype(np.float32)
+
 
 
 # ---------------------------------------------------------------------------
@@ -232,7 +242,7 @@ def wave_harmonic_no_erosion(
 ) -> np.ndarray:
     """
     Pipeline D — Wave-Harmonic without Erosion (Phases I–III).
-    fBm → Wave Enhancement → Contextual Scale. No thermal erosion.
+    fBm → Wave Enhancement → Covariant Curvature. No thermal erosion.
     Isolates the contribution of wave enhancement + contextual scaling.
     """
     p = params or DEFAULT_PARAMS
@@ -248,7 +258,7 @@ def wave_harmonic_pipeline(
 ) -> np.ndarray:
     """
     Pipeline E — Full Wave-Harmonic Pipeline (all 4 phases).
-    fBm → Wave Enhancement → Contextual Scale → Thermal Erosion.
+    fBm → Wave Enhancement → Covariant Curvature → Thermal Erosion.
     This is the complete proposed method.
     """
     p = params or DEFAULT_PARAMS

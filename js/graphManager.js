@@ -259,7 +259,8 @@ async function initGraphManager(graphCanvasEl)
         importGraphFromJSON(exampleIsland, "Island", "island");
         importGraphFromJSON(examplePixelRock, "Pixel Art Rocks", "pixelArtRocks");
         importGraphFromJSON(exampleWoodPlank, "Wood Planks", "wookPlanks");
-        importGraphFromJSON(exampleEye, "Eye", "eye", true);
+        importGraphFromJSON(exampleEye, "Eye", "eye");
+        importGraphFromJSON(usingCovariantCurvature, "Covariant Curvature", "covariant_curvature", true);
     }
     else
     {
@@ -271,6 +272,13 @@ async function initGraphManager(graphCanvasEl)
         }
         else
             renderGraphList();
+
+        // Migration: Force import of new Covariant Curvature example if missing
+        const graphs = loadAllGraphs();
+        if (!graphs["example_covariant_curvature"]) {
+            importGraphFromJSON(usingCovariantCurvature, "Covariant Curvature", "covariant_curvature");
+            renderGraphList();
+        }
     }
     
 }

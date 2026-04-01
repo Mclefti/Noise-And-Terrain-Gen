@@ -50,9 +50,21 @@ def mask_blend(a: np.ndarray, b: np.ndarray, mask: np.ndarray, **_) -> np.ndarra
     """mix(B, A, Mask)  — same as mask*A + (1-mask)*B"""
     return (mask * a + (1 - mask) * b).astype(np.float32)
 
-def contextual_scale(a: np.ndarray, b: np.ndarray, **_) -> np.ndarray:
-    """H_final = P + (P * ψ) (Contextual scaling of wave distortion)"""
-    return (a + (a * b)).astype(np.float32)
+def covariant_curvature(a: np.ndarray, b: np.ndarray, **_) -> np.ndarray:
+    """
+    Covariant Curvature Blend
+    Uses a phase-shifted cosine to flip the wave's influence 
+    based on the base terrain's altitude.
+    """
+    # 1. P * W is the base interaction
+    # 2. cos(P * PI) creates an oscillating "push-pull" force
+    # If P is low, it adds height. If P is high, it carves height.
+    interaction = a * b * np.cos(a * np.pi)
+    
+    # We use a 0.4 multiplier to keep it subtle and natural
+    result = a + (interaction * 0.4)
+    
+    return np.clip(result, 0.0, 1.0).astype(np.float32)
 
 
 # ---------------------------------------------------------------------------
@@ -113,7 +125,7 @@ MATH_OPS: dict[str, callable] = {
     "Math/Normalize":   normalize,
     "Combine/Mix":      mix,
     "Combine/Mask Blend": mask_blend,
-    "Combine/Contextual Scale": contextual_scale,
+    "Combine/Covariant Curvature": covariant_curvature,
     "Expression/Formula1": formula1,
     "Expression/Formula2": formula2,
 }

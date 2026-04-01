@@ -1,12 +1,12 @@
 class MaskBlendNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addInput("A","array");
-        this.addInput("B","array");
-        this.addInput("Mask","array");
-        this.addOutput("out","array");
+        this.addInput("A", "array");
+        this.addInput("B", "array");
+        this.addInput("Mask", "array");
+        this.addOutput("out", "array");
         this.properties = {};
-        this.title="Mask Blend";
+        this.title = "Mask Blend";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -47,7 +47,7 @@ class MaskBlendNode extends GPUNodeBase {
     }
 }
 
-LiteGraph.registerNodeType("Combine/Mask Blend",MaskBlendNode);
+LiteGraph.registerNodeType("Combine/Mask Blend", MaskBlendNode);
 
 class MixNode extends GPUNodeBase {
     constructor() {
@@ -100,14 +100,14 @@ class MixNode extends GPUNodeBase {
 
 LiteGraph.registerNodeType("Combine/Mix", MixNode);
 
-class ContextualScaleNode extends GPUNodeBase {
+class CovariantCurvatureNode extends GPUNodeBase {
     constructor() {
         super();
         this.addInput("Base (P)", "array");
         this.addInput("Wave (ψ)", "array");
         this.addOutput("out", "array");
         this.properties = {};
-        this.title = "Contextual Scale";
+        this.title = "Covariant Curvature";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -124,21 +124,26 @@ class ContextualScaleNode extends GPUNodeBase {
         uniform sampler2D tex0;
         uniform sampler2D tex1;
 
+        const float PI = 3.14159265359;
+
         void main() {
             float P = texture(tex0, vUv).r;
             float W = texture(tex1, vUv).r;
 
-            // Hfinal = P + (P * ψ)
-            float v = P + (P * W);
+            // Covariant Curvature: 
+            // The wave pushes 'out' in valleys and 'in' on peaks.
+            // This creates diverse, shelf-like rock formations.
+            float drift = P * W * cos(P * PI);
+            
+            float v = P + (drift * 0.4);
 
+            v = clamp(v, 0.0, 1.0);
             fragColor = vec4(vec3(v), 1.0);
         }`;
 
-        this.runShader("contextualScaleGPU", frag, 2);
-
+        this.runShader("covariantCurvatureGPU", frag, 2);
         this.setOutputTexture();
         this.drawPreviewTexture();
     }
 }
-
-LiteGraph.registerNodeType("Combine/Contextual Scale", ContextualScaleNode);
+LiteGraph.registerNodeType("Combine/Covariant Curvature", CovariantCurvatureNode);

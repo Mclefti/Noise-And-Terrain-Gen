@@ -1,3 +1,268 @@
+const usingCovariantCurvature =
+{
+  "last_node_id": 6,
+  "last_link_id": 22,
+  "nodes": [
+    {
+      "id": 5,
+      "type": "Output/Generate Terrain",
+      "pos": {
+        "0": 832,
+        "1": 231,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": [
+        220,
+        130
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "heightmap",
+          "type": "array",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": {
+        "water": true
+      }
+    },
+    {
+      "id": 3,
+      "type": "Filter/Thermal Erosion",
+      "pos": {
+        "0": 568,
+        "1": 211,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 210,
+        "1": 220
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "array",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "out",
+          "type": "array",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "Thermal Erosion",
+      "properties": {
+        "iterations": 36.13888702392578,
+        "rate": 0.5
+      }
+    },
+    {
+      "id": 6,
+      "type": "Combine/Covariant Curvature",
+      "pos": {
+        "0": 363,
+        "1": 202,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 140,
+        "1": 184
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "Base (P)",
+          "type": "array",
+          "link": 19
+        },
+        {
+          "name": "Wave (ψ)",
+          "type": "array",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "out",
+          "type": "array",
+          "links": [
+            22
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "Covariant Curvature",
+      "properties": {}
+    },
+    {
+      "id": 1,
+      "type": "Generator/Perlin",
+      "pos": {
+        "0": 80,
+        "1": 48,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 210,
+        "1": 292
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "noise",
+          "type": "array",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 16.654320610894096,
+        "octaves": 5.58456776936849,
+        "amplitude": 1.9969134860568576,
+        "offset": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 2,
+      "type": "Generator/Wave Interference",
+      "pos": {
+        "0": 82,
+        "1": 399,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "size": {
+        "0": 210,
+        "1": 292
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "out",
+          "type": "array",
+          "links": [
+            13,
+            20
+          ],
+          "slot_index": 0
+        }
+      ],
+      "title": "Wave Interference",
+      "properties": {
+        "frequency": 3.6083029922485346,
+        "sources": 16.82530805799696,
+        "phase": 3.4867880297851563,
+        "decay": 0,
+        "seed": 1
+      }
+    }
+  ],
+  "links": [
+    [
+      12,
+      3,
+      0,
+      5,
+      0,
+      "array"
+    ],
+    [
+      13,
+      2,
+      0,
+      4,
+      1,
+      "array"
+    ],
+    [
+      19,
+      1,
+      0,
+      6,
+      0,
+      "array"
+    ],
+    [
+      20,
+      2,
+      0,
+      6,
+      1,
+      "array"
+    ],
+    [
+      22,
+      6,
+      0,
+      3,
+      0,
+      "array"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
 const exampleEye = {
   "last_node_id": 32,
   "last_link_id": 44,

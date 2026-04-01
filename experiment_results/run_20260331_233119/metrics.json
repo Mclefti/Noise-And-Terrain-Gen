@@ -1,0 +1,365 @@
+{
+  "experiment": "Wave-Harmonic Terrain Generation \u2014 Experimental Validation",
+  "parameters": {
+    "noise_type": "perlin",
+    "frequency": 5.0,
+    "octaves": 6,
+    "persistence": 0.5,
+    "lacunarity": 2.0,
+    "wave_intensity": 0.3,
+    "wave_count": 8,
+    "erosion_iterations": 10,
+    "talus_angle": 0.05,
+    "thermal_rate": 0.5
+  },
+  "performance": {
+    "32": {
+      "A_raw_noise": {
+        "mean_latency_ms": 0.7893640000474988,
+        "std_latency_ms": 0.2221528778716678,
+        "peak_memory_mb": 0.10894203186035156,
+        "n_samples": 50,
+        "throughput_mpps": 1.2972468974242328
+      },
+      "B_fbm": {
+        "mean_latency_ms": 4.893918000088888,
+        "std_latency_ms": 1.556056171299065,
+        "peak_memory_mb": 0.10880374908447266,
+        "n_samples": 50,
+        "throughput_mpps": 0.20923930478226263
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 5.926822000146785,
+        "std_latency_ms": 1.1044695446766875,
+        "peak_memory_mb": 0.1464557647705078,
+        "n_samples": 50,
+        "throughput_mpps": 0.1727738744262337
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 4.397076000095694,
+        "std_latency_ms": 0.5142554334876503,
+        "peak_memory_mb": 0.10885047912597656,
+        "n_samples": 50,
+        "throughput_mpps": 0.23288203341896174
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 6.082783999991079,
+        "std_latency_ms": 1.0427819626070187,
+        "peak_memory_mb": 0.15462684631347656,
+        "n_samples": 50,
+        "throughput_mpps": 0.16834396881452665
+      }
+    },
+    "64": {
+      "A_raw_noise": {
+        "mean_latency_ms": 2.270198000042001,
+        "std_latency_ms": 0.2539049104121725,
+        "peak_memory_mb": 0.42534828186035156,
+        "n_samples": 50,
+        "throughput_mpps": 1.8042479113822758
+      },
+      "B_fbm": {
+        "mean_latency_ms": 13.325823999839486,
+        "std_latency_ms": 1.1924245089466228,
+        "peak_memory_mb": 0.42525672912597656,
+        "n_samples": 50,
+        "throughput_mpps": 0.3073731125406832
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 18.48481199991511,
+        "std_latency_ms": 3.1986440763288977,
+        "peak_memory_mb": 0.5712604522705078,
+        "n_samples": 50,
+        "throughput_mpps": 0.22158732260943798
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 13.748447999932978,
+        "std_latency_ms": 0.3434732277138989,
+        "peak_memory_mb": 0.42525672912597656,
+        "n_samples": 50,
+        "throughput_mpps": 0.2979245366473341
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 16.494428000150947,
+        "std_latency_ms": 0.4181647682505722,
+        "peak_memory_mb": 0.6029157638549805,
+        "n_samples": 50,
+        "throughput_mpps": 0.24832628327351006
+      }
+    },
+    "128": {
+      "A_raw_noise": {
+        "mean_latency_ms": 8.731466000135697,
+        "std_latency_ms": 0.5427640916332311,
+        "peak_memory_mb": 1.6909732818603516,
+        "n_samples": 50,
+        "throughput_mpps": 1.87643174694208
+      },
+      "B_fbm": {
+        "mean_latency_ms": 53.43793799984269,
+        "std_latency_ms": 10.075509621950108,
+        "peak_memory_mb": 1.6908817291259766,
+        "n_samples": 50,
+        "throughput_mpps": 0.3065986565583469
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 59.06721799990919,
+        "std_latency_ms": 0.8804982032593286,
+        "peak_memory_mb": 2.270479202270508,
+        "n_samples": 50,
+        "throughput_mpps": 0.27737890076396
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 52.00604999987263,
+        "std_latency_ms": 1.3217149308469782,
+        "peak_memory_mb": 1.6908349990844727,
+        "n_samples": 50,
+        "throughput_mpps": 0.3150402693540488
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 62.1341119999488,
+        "std_latency_ms": 2.032509064924632,
+        "peak_memory_mb": 2.3957910537719727,
+        "n_samples": 50,
+        "throughput_mpps": 0.26368768254084807
+      }
+    },
+    "256": {
+      "A_raw_noise": {
+        "mean_latency_ms": 36.08135599995876,
+        "std_latency_ms": 1.6560550090979742,
+        "peak_memory_mb": 6.753426551818848,
+        "n_samples": 50,
+        "throughput_mpps": 1.8163397184982435
+      },
+      "B_fbm": {
+        "mean_latency_ms": 216.68742800011387,
+        "std_latency_ms": 6.976212319634176,
+        "peak_memory_mb": 6.753334999084473,
+        "n_samples": 50,
+        "throughput_mpps": 0.3024448654213827
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 258.4443160000592,
+        "std_latency_ms": 20.19099259273681,
+        "peak_memory_mb": 9.067307472229004,
+        "n_samples": 50,
+        "throughput_mpps": 0.25357880186455717
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 222.2420040000361,
+        "std_latency_ms": 4.338442471156876,
+        "peak_memory_mb": 6.753334999084473,
+        "n_samples": 50,
+        "throughput_mpps": 0.29488574986027105
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 253.11861599981057,
+        "std_latency_ms": 10.756599061280248,
+        "peak_memory_mb": 9.567666053771973,
+        "n_samples": 50,
+        "throughput_mpps": 0.2589141843286985
+      }
+    },
+    "512": {
+      "A_raw_noise": {
+        "mean_latency_ms": 165.63721200003783,
+        "std_latency_ms": 5.362235457297674,
+        "peak_memory_mb": 27.003426551818848,
+        "n_samples": 50,
+        "throughput_mpps": 1.5826395339227282
+      },
+      "B_fbm": {
+        "mean_latency_ms": 981.2335260000691,
+        "std_latency_ms": 27.8978383307553,
+        "peak_memory_mb": 27.003334999084473,
+        "n_samples": 50,
+        "throughput_mpps": 0.26715760627198704
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 1282.3381100000552,
+        "std_latency_ms": 40.51384742626385,
+        "peak_memory_mb": 36.25489902496338,
+        "n_samples": 50,
+        "throughput_mpps": 0.20442658449883291
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 1124.4751579999865,
+        "std_latency_ms": 57.76822691255621,
+        "peak_memory_mb": 27.003334999084473,
+        "n_samples": 50,
+        "throughput_mpps": 0.23312564811681072
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 1402.5204700000177,
+        "std_latency_ms": 51.07002824252244,
+        "peak_memory_mb": 38.25515079498291,
+        "n_samples": 50,
+        "throughput_mpps": 0.18690921495070706
+      }
+    },
+    "1024": {
+      "A_raw_noise": {
+        "mean_latency_ms": 716.4933820000078,
+        "std_latency_ms": 31.00845414914793,
+        "peak_memory_mb": 108.00337314605713,
+        "n_samples": 50,
+        "throughput_mpps": 1.463483161663018
+      },
+      "B_fbm": {
+        "mean_latency_ms": 3997.4059940000006,
+        "std_latency_ms": 130.97939400917653,
+        "peak_memory_mb": 108.00328159332275,
+        "n_samples": 50,
+        "throughput_mpps": 0.26231411109451597
+      },
+      "C_fbm_eroded": {
+        "mean_latency_ms": 4760.359476000086,
+        "std_latency_ms": 224.56445076087522,
+        "peak_memory_mb": 145.00484561920166,
+        "n_samples": 50,
+        "throughput_mpps": 0.22027244061851203
+      },
+      "D_wave_harmonic_no_erode": {
+        "mean_latency_ms": 4053.212654000126,
+        "std_latency_ms": 59.777232558152846,
+        "peak_memory_mb": 108.00328159332275,
+        "n_samples": 50,
+        "throughput_mpps": 0.25870243915407637
+      },
+      "E_wave_harmonic_full": {
+        "mean_latency_ms": 4809.535273999973,
+        "std_latency_ms": 64.62967438799092,
+        "peak_memory_mb": 153.0051507949829,
+        "n_samples": 50,
+        "throughput_mpps": 0.2180202327797723
+      }
+    }
+  },
+  "structural": {
+    "A_raw_noise": {
+      "mean_spectral_slope": -2.8513539968409174,
+      "std_spectral_slope": 0.032671705450837855,
+      "mean_roughness": 5.2854574696539204e-05,
+      "std_roughness": 2.236540064611662e-06,
+      "mean_regional_diff": -3.3162553085753456e-07,
+      "n_samples": 50
+    },
+    "B_fbm": {
+      "mean_spectral_slope": -3.0676071976618537,
+      "std_spectral_slope": 0.11795179718616462,
+      "mean_roughness": 0.0015436329736439802,
+      "std_roughness": 6.526606961624873e-06,
+      "mean_regional_diff": 6.762967395798018e-08,
+      "n_samples": 50
+    },
+    "C_fbm_eroded": {
+      "mean_spectral_slope": -3.0676071976618537,
+      "std_spectral_slope": 0.11795179718616462,
+      "mean_roughness": 0.0015436329736439802,
+      "std_roughness": 6.526606961624873e-06,
+      "mean_regional_diff": 6.762967395798018e-08,
+      "n_samples": 50
+    },
+    "D_wave_harmonic_no_erode": {
+      "mean_spectral_slope": -3.0828429787998233,
+      "std_spectral_slope": 0.10122332763843449,
+      "mean_roughness": 0.001977157202882349,
+      "std_roughness": 0.00026171674603599123,
+      "mean_regional_diff": 0.00037578565180779573,
+      "n_samples": 50
+    },
+    "E_wave_harmonic_full": {
+      "mean_spectral_slope": -3.0828429787998233,
+      "std_spectral_slope": 0.10122332763843449,
+      "mean_roughness": 0.001977157202882349,
+      "std_roughness": 0.00026171674603599123,
+      "mean_regional_diff": 0.00037578565180779573,
+      "n_samples": 50
+    }
+  },
+  "statistics": {
+    "performance": {
+      "latency_BvsE_32x32": {
+        "w_statistic": 187.0,
+        "p_value": 4.028586058524297e-06,
+        "significant": true,
+        "test_used": "wilcoxon"
+      },
+      "latency_BvsE_64x64": {
+        "w_statistic": 49.0,
+        "p_value": 4.9604764740251994e-11,
+        "significant": true,
+        "test_used": "wilcoxon"
+      },
+      "latency_BvsE_128x128": {
+        "w_statistic": 133.0,
+        "p_value": 1.2141019567479816e-07,
+        "significant": true,
+        "test_used": "wilcoxon"
+      },
+      "latency_BvsE_256x256": {
+        "w_statistic": 0.0,
+        "p_value": 1.7763568394002505e-15,
+        "significant": true,
+        "test_used": "wilcoxon"
+      },
+      "latency_BvsE_512x512": {
+        "w_statistic": 0.0,
+        "p_value": 1.7763568394002505e-15,
+        "significant": true,
+        "test_used": "wilcoxon"
+      },
+      "latency_BvsE_1024x1024": {
+        "w_statistic": 0.0,
+        "p_value": 1.7763568394002505e-15,
+        "significant": true,
+        "test_used": "wilcoxon"
+      }
+    },
+    "structural": {
+      "slope_B_fbm_vs_D_wave_harmonic_no_erode": {
+        "baseline_mean_slope": -3.0676071976618537,
+        "baseline_std_slope": 0.11795179718616462,
+        "enhanced_mean_slope": -3.0828429787998233,
+        "enhanced_std_slope": 0.10122332763843449,
+        "t_statistic": 2.182048673390747,
+        "p_value": 0.03393038191704595,
+        "significant": true,
+        "test_used": "paired_t_test"
+      },
+      "slope_B_fbm_vs_E_wave_harmonic_full": {
+        "baseline_mean_slope": -3.0676071976618537,
+        "baseline_std_slope": 0.11795179718616462,
+        "enhanced_mean_slope": -3.0828429787998233,
+        "enhanced_std_slope": 0.10122332763843449,
+        "t_statistic": 2.182048673390747,
+        "p_value": 0.03393038191704595,
+        "significant": true,
+        "test_used": "paired_t_test"
+      },
+      "slope_C_fbm_eroded_vs_E_wave_harmonic_full": {
+        "baseline_mean_slope": -3.0676071976618537,
+        "baseline_std_slope": 0.11795179718616462,
+        "enhanced_mean_slope": -3.0828429787998233,
+        "enhanced_std_slope": 0.10122332763843449,
+        "t_statistic": 2.182048673390747,
+        "p_value": 0.03393038191704595,
+        "significant": true,
+        "test_used": "paired_t_test"
+      },
+      "roughness_differential_D_wave_harmonic_no_erode": {
+        "t_statistic": 9.40481234360436,
+        "p_value": 1.482408795624045e-12,
+        "significant": true,
+        "mean_diff": 0.00037578565180779573
+      },
+      "roughness_differential_E_wave_harmonic_full": {
+        "t_statistic": 9.40481234360436,
+        "p_value": 1.482408795624045e-12,
+        "significant": true,
+        "mean_diff": 0.00037578565180779573
+      }
+    }
+  }
+}

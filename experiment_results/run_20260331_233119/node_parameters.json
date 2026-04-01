@@ -1,0 +1,34 @@
+{
+  "Phase I (Perlin Noise Node)": {
+    "type": "Generator/Perlin",
+    "properties": {
+      "Frequency": 5.0,
+      "Octaves": 6,
+      "Amplitude": 1.0,
+      "Offset": 0.0,
+      "Seed": "42 (example)"
+    }
+  },
+  "Phase II (Wave Interference Node)": {
+    "type": "Generator/Wave Interference",
+    "properties": {
+      "Frequency": 2.0,
+      "Sources": 8,
+      "Phase": 0.0,
+      "Decay": 0.0,
+      "Seed": "Derived from base seed"
+    }
+  },
+  "Phase III (Covariant Curvature Logic)": {
+    "type": "Combine/Covariant Curvature",
+    "formula": "H = P + (P * W * cos(P * PI)) * 0.4",
+    "note": "This node uses the base (P) to mask the wave (W) based on curvature."
+  },
+  "Phase IV (Thermal Erosion Node)": {
+    "type": "Filter/Thermal Erosion",
+    "properties": {
+      "Iterations": 10,
+      "Erosion Rate": 0.5
+    }
+  }
+}
