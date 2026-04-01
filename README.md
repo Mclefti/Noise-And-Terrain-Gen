@@ -8,66 +8,39 @@ Noise & TerrainGen is a free web-based graph editor for creating procedural text
 Noise & TerrainGen uses a Service-Oriented Architecture (SOA) splitting real-time preview computation to the user's GPU, and heavy export/derivation tasks to the Python backend:
 
 ```mermaid
-graph TD
-    subgraph Client["Client Layer (Frontend Browser)"]
-        direction TB
-        WI["Web Interface (HTML/JS/CSS)"]
-        V3D["3D Visualization Viewport (Three.js)"]
+flowchart TD
+    %% Styling to highlight the "Heavy" computation
+    classDef heavy fill:#ffe6e6,stroke:#cc0000,stroke-width:2px,color:#000;
+    classDef standard fill:#f9f9f9,stroke:#333,stroke-width:1px,color:#000;
 
-        subgraph WebGL["Real-time GPU Execution Engine (WebGL2 / LiteGraph)"]
-            direction LR
-            Param["Input Params"] --> NNode["Noise Nodes"]
-            NNode --> CNode["Combiner / Transform"]
-            CNode --> FNode["Filter Nodes"]
-            FNode --> OutTex["Raw Heightmap (Texture)"]
-        end
-
-        WI --> WebGL
-        OutTex --> V3D
+    subgraph CL ["💻 Client Layer (Fast GPU Preview)"]
+        UI["Web UI & 3D Viewport<br/>(HTML / JS / Three.js)"]
+        GPU["GPU Node Engine<br/>(WebGL 2 / LiteGraph)"]
+        UI <-->|"Live Edits &<br/>60fps Preview"| GPU
     end
 
-    subgraph Server["Server Layer (Docker Compose)"]
-        LB["Nginx Reverse-Proxy / Load Balancer (:8080)"]
-
-        LB --> B1["Backend Replica 1"]
-        LB --> B2["Backend Replica 2"]
-        LB --> B3["Backend Replica 3"]
-
-        subgraph API["Terrain Generation Service API (FastAPI)"]
-            direction TB
-            EP1["POST /generate_terrain"]
-            EP2["POST /compute_maps"]
-            EP3["POST /preview_node"]
-            EP4["GET /health"]
-        end
-
-        B1 --> API
-        B2 --> API
-        B3 --> API
+    subgraph SL ["🌐 Server Layer (Single Instance)"]
+        API["FastAPI Service (:8080)<br/>/generate, /compute, /preview"]
     end
 
-    subgraph Core["Core Computation Layer (NumPy)"]
-        direction TB
-        TOPO["Graph Executor (Topological Sort)"]
-        TOPO --> GEN["generators.py"]
-        TOPO --> FIL["filters.py"]
-        TOPO --> TRN["transforms.py"]
-        TOPO --> MTH["math_ops.py"]
-        GEN & FIL & TRN & MTH --> DER["Derived Outputs"]
-
-        subgraph DER["Derived Outputs"]
-            direction LR
-            HM["Heightmap (Float32)"]
-            NM["Normal Map (PNG)"]
-            SM["Splat Map (PNG)"]
-        end
+    subgraph KL ["⚙️ Core Layer (Heavy CPU Computation)"]
+        TP["Graph Executor<br/>(Topological Sort)"]
+        OPS["NumPy Math Operations<br/>(Generators, Filters, Transforms)"]
+        OUT["Final Outputs<br/>(Height, Normal & Splat Maps)"]
+        
+        TP -->|"O(N²) Array Processing"| OPS --> OUT
     end
 
-    OutTex -- "POST /compute_maps\n(Base64 Float32 Heightmap)" --> LB
-    WI -- "POST /generate_terrain\n(Graph JSON + Dimensions)" --> LB
-    WI -. "POST /preview_node\n(Single Node Preview)" .-> LB
-    API --> TOPO
-    Core -. "Base64 Float32 / Base64 PNG" .-> WI
+    %% Network Connections
+    GPU -.->|"POST /compute<br/>(Base64 Float32)"| API
+    UI -.->|"POST /generate<br/>(Graph JSON)"| API
+    
+    API ==>|"Triggers execution"| TP
+    OUT -.->|"Returns Base64 / PNGs"| UI
+
+    %% Apply styles
+    class KL,TP,OPS,OUT heavy;
+    class CL,SL,UI,GPU,API standard;
 ```
 
 ## Local Setup
