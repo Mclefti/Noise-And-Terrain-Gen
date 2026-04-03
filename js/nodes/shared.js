@@ -15,7 +15,7 @@ class NoiseNode extends LGraphNode {
         if (isLoadingGraph) return;
 
         this.onExecute();
-        this.drawPreviewTexture();
+        if (this.drawPreviewTexture) this.drawPreviewTexture();
     }
 
     onPropertyChanged()
@@ -23,7 +23,7 @@ class NoiseNode extends LGraphNode {
         if (isLoadingGraph) return;
 
         this.onExecute();
-        this.drawPreviewTexture();
+        if (this.drawPreviewTexture) this.drawPreviewTexture();
         renderNode(this)
 
         // Needed to save changes of props

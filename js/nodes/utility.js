@@ -215,10 +215,17 @@ class GenerateTerrainNode extends NoiseNode {
         this.addInput("heightmap", "array");
         this.title = "Generate Terrain";
 
-        this.properties = { water: true };
-        this.addWidget("toggle", "Water", true, { property: "water" });
+        // Push widgets below the input slot so they don't block connections
+        this.widgets_start_y = 36;
 
-        this.size = [220, 130];
+        this.properties = { water: true, resolution: WIDTH };
+        this.addWidget("toggle", "Water", true, { property: "water" });
+        this.addWidget("combo", "Resolution", String(WIDTH), (v) => {
+            this.properties.resolution = parseInt(v);
+            if (typeof setResolution === "function") setResolution(this.properties.resolution);
+        }, { values: ["64", "128", "256", "512", "1024"] });
+
+        this.size = [220, 155];
         this._busy = false;
         this._status = "Ready";
         this._statusColor = "#888";
@@ -227,7 +234,7 @@ class GenerateTerrainNode extends NoiseNode {
     }
 
     computeSize() {
-        return [220, 130];
+        return [220, 155];
     }
 
     onExecute() {
@@ -240,7 +247,7 @@ class GenerateTerrainNode extends NoiseNode {
 
         // Force minimum size (prevents truncated UI if loading old graph JSON)
         if (this.size[0] < 220) this.size[0] = 220;
-        if (this.size[1] < 130) this.size[1] = 130;
+        if (this.size[1] < 155) this.size[1] = 155;
 
         const w = this.size[0];
 
@@ -248,11 +255,11 @@ class GenerateTerrainNode extends NoiseNode {
         ctx.fillStyle = this._statusColor;
         ctx.font = "11px sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(this._status, w / 2, 80);
+        ctx.fillText(this._status, w / 2, 100);
 
         // "Generate" button
         const btnX = 15;
-        const btnY = 90;
+        const btnY = 110;
         const btnW = w - 30;
         const btnH = 26;
 
@@ -275,7 +282,7 @@ class GenerateTerrainNode extends NoiseNode {
     onMouseDown(e, localPos) {
         // Check if click was on the button area
         const btnX = 15;
-        const btnY = 90;
+        const btnY = 110;
         const btnW = this.size[0] - 30;
         const btnH = 26;
 

@@ -89,6 +89,24 @@ const GPU = {
         this.emptyTexture = gl.createTexture(this.gl, WIDTH, HEIGHT, new Float32Array(WIDTH*HEIGHT).fill(0));
     },
 
+    resize(width, height) {
+        this.canvas.width = width;
+        this.canvas.height = height;
+        // Shaders bake ${WIDTH}/${HEIGHT} into GLSL — must recompile
+        this.shaderCache = {};
+        // Recreate empty texture at new size
+        const gl = this.gl;
+        if (this.emptyTexture) gl.deleteTexture(this.emptyTexture);
+        const tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32F, width, height, 0, gl.RED, gl.FLOAT, new Float32Array(width * height));
+        this.emptyTexture = tex;
+    },
+
     getProgram(key, vs, fs) {
         if (!this.shaderCache[key]) {
             this.shaderCache[key] = createProgram(this.gl, vs, fs);
@@ -118,6 +136,23 @@ class GPUNodeBase extends NoiseNode {
 
         this._inputTextures = [];
         this._uniformCache = {};
+    }
+
+    rebuildTextures() {
+        const gl = this.gl;
+        // Recreate main output texture + framebuffer
+        this.outputTexture = this.createTexture();
+        if (this.framebuffer) gl.deleteFramebuffer(this.framebuffer);
+        this.framebuffer = this.createFramebuffer(this.outputTexture);
+        // Recreate ping-pong pair
+        this._pingTextures = [this.createTexture(), this.createTexture()];
+        this._pingFramebuffers = [
+            this.createFramebuffer(this._pingTextures[0]),
+            this.createFramebuffer(this._pingTextures[1])
+        ];
+        this._pingCurrent = 0;
+        // Input textures will be recreated on next execute
+        this._inputTextures = [];
     }
 
     createTexture() {

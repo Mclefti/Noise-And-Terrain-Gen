@@ -28,6 +28,37 @@ const PREVIEW_PADDING = 10;
 
 GPU.init(WIDTH, HEIGHT);
 
+// --- Dynamic resolution change ---
+function setResolution(n) {
+    n = parseInt(n);
+    if (n === WIDTH && n === HEIGHT) return;
+    WIDTH = n;
+    HEIGHT = n;
+
+    // Resize GPU canvas & clear shader cache
+    GPU.resize(n, n);
+
+    // Update the main preview canvas
+    noiseCanvas.width = n;
+    noiseCanvas.height = n;
+
+    // Rebuild textures for every GPU node & resize preview canvases
+    if (graph && graph._nodes) {
+        graph._nodes.forEach(node => {
+            if (node.rebuildTextures) node.rebuildTextures();
+            if (node.previewCanvas) {
+                node.previewCanvas.width = n;
+                node.previewCanvas.height = n;
+            }
+        });
+    }
+
+    // Re-execute & render
+    if (typeof activeNode !== "undefined" && activeNode) {
+        renderNode(activeNode);
+    }
+}
+
 
 // --- Node evaluation ---
 let activeNode = null;

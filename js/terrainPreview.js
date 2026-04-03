@@ -28,9 +28,9 @@ class TerrainPreview {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x1a1e2e);
 
-        // Camera — top-down isometric view
+        // Camera — near-top-down with a slight tilt to match 2D preview
         this.camera = new THREE.PerspectiveCamera(40, w / h, 0.01, 100);
-        this.camera.position.set(0.8, 0.55, 0.8);
+        this.camera.position.set(0, 1.1, 0.35);
         this.camera.lookAt(0, 0, 0);
 
         // Renderer — no tone mapping so vertex colors stay true
