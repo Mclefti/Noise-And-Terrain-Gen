@@ -223,7 +223,7 @@ class GenerateTerrainNode extends NoiseNode {
         this.addWidget("combo", "Resolution", String(WIDTH), (v) => {
             this.properties.resolution = parseInt(v);
             if (typeof setResolution === "function") setResolution(this.properties.resolution);
-        }, { values: ["64", "128", "256", "512", "1024"] });
+        }, { values: ["32", "64", "128", "256", "512", "1024"] });
 
         this.size = [220, 155];
         this._busy = false;

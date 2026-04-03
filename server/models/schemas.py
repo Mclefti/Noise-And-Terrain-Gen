@@ -24,8 +24,8 @@ class GraphDef(BaseModel):
 
 
 class GenerateTerrainRequest(BaseModel):
-    width: int = Field(default=1024, ge=64, le=4096)
-    height: int = Field(default=1024, ge=64, le=4096)
+    width: int = Field(default=1024, ge=32, le=4096)
+    height: int = Field(default=1024, ge=32, le=4096)
     graph: GraphDef
     # Optional: explicitly name the output node id; if absent, uses the last node in topo order
     output_node_id: int | None = None
@@ -52,8 +52,8 @@ class ComputeMapsRequest(BaseModel):
     and returns derived maps (normal, splat).
     """
     data: str          # base64 float32 binary (heightmap)
-    width: int = Field(ge=64, le=4096)
-    height: int = Field(ge=64, le=4096)
+    width: int = Field(ge=32, le=4096)
+    height: int = Field(ge=32, le=4096)
 
 
 class ComputeMapsResponse(BaseModel):
@@ -80,7 +80,7 @@ class PreviewNodeResponse(BaseModel):
 
 class ExperimentRequest(BaseModel):
     """Request to run the Wave-Harmonic experimental pipeline."""
-    resolution: int = Field(default=256, ge=64, le=2048)
+    resolution: int = Field(default=256, ge=32, le=2048)
     n_seeds: int = Field(default=5, ge=1, le=50)
     n_perf_samples: int = Field(default=5, ge=1, le=50)
     noise_type: str = Field(default="perlin")

@@ -152,7 +152,7 @@ class TerrainPreview {
         });
 
         this.mesh = new THREE.Mesh(geo, mat);
-        this.mesh.position.set(-0.5, 0, -0.5);
+        this.mesh.position.set(0, 0, 0);
         this.scene.add(this.mesh);
 
         // --- Water Plane (conditional) ---
@@ -170,7 +170,7 @@ class TerrainPreview {
             });
 
             this.waterMesh = new THREE.Mesh(waterGeo, waterMat);
-            this.waterMesh.position.set(-0.5, waterY, -0.5);
+            this.waterMesh.position.set(0, waterY, 0);
             this.scene.add(this.waterMesh);
         }
 
