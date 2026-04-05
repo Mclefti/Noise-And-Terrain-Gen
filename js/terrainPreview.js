@@ -216,6 +216,170 @@ class TerrainPreview {
         }
     }
 
+    /**
+     * Export the terrain mesh as OBJ + MTL + baked color texture,
+     * packaged into a single ZIP download.
+     */
+    exportOBJ() {
+        if (!this.mesh) {
+            alert("No terrain mesh to export. Generate terrain first.");
+            return;
+        }
+
+        if (typeof JSZip === "undefined") {
+            alert("JSZip library not loaded. Cannot create ZIP package.");
+            return;
+        }
+
+        const geo = this.mesh.geometry;
+        const pos = geo.attributes.position;
+        const norm = geo.attributes.normal;
+        const uv  = geo.attributes.uv;
+        const col  = geo.attributes.color;
+        const idx = geo.index;
+
+        // --- 1. Bake vertex colors into a texture PNG ---
+        const texSize = 512;
+        const texCanvas = document.createElement("canvas");
+        texCanvas.width = texSize;
+        texCanvas.height = texSize;
+        const tCtx = texCanvas.getContext("2d");
+
+        if (col && uv) {
+            // Build a pixel buffer from vertex colors mapped via UVs
+            const imgData = tCtx.createImageData(texSize, texSize);
+
+            // For a PlaneGeometry grid, vertices are laid out in rows.
+            // Determine grid dimensions from UV coords:
+            // segX+1 columns, segY+1 rows
+            const segX = Math.round(Math.sqrt(pos.count * (1)) - 1) || 1;
+            const segY = Math.round(pos.count / (segX + 1)) - 1 || 1;
+            const cols = segX + 1;
+            const rows = segY + 1;
+
+            for (let iy = 0; iy < rows; iy++) {
+                for (let ix = 0; ix < cols; ix++) {
+                    const vi = iy * cols + ix;
+                    if (vi >= pos.count) continue;
+
+                    const r = Math.round(col.getX(vi) * 255);
+                    const g = Math.round(col.getY(vi) * 255);
+                    const b = Math.round(col.getZ(vi) * 255);
+
+                    // Map grid position to pixel region
+                    const px0 = Math.floor((ix / (cols - 1)) * (texSize - 1));
+                    const py0 = Math.floor((iy / (rows - 1)) * (texSize - 1));
+                    const px1 = ix < cols - 1 ? Math.floor(((ix + 1) / (cols - 1)) * (texSize - 1)) : texSize;
+                    const py1 = iy < rows - 1 ? Math.floor(((iy + 1) / (rows - 1)) * (texSize - 1)) : texSize;
+
+                    for (let py = py0; py < py1; py++) {
+                        for (let px = px0; px < px1; px++) {
+                            const pi = (py * texSize + px) * 4;
+                            imgData.data[pi + 0] = r;
+                            imgData.data[pi + 1] = g;
+                            imgData.data[pi + 2] = b;
+                            imgData.data[pi + 3] = 255;
+                        }
+                    }
+                }
+            }
+            tCtx.putImageData(imgData, 0, 0);
+        } else {
+            // Fallback: solid grey
+            tCtx.fillStyle = "#888";
+            tCtx.fillRect(0, 0, texSize, texSize);
+        }
+
+        // --- 2. Build MTL content ---
+        const mtlName = "terrain_material";
+        const texFilename = "terrain_texture.png";
+        let mtl = "# Terrain material exported from Noise & TerrainGen\n";
+        mtl += `newmtl ${mtlName}\n`;
+        mtl += "Ka 0.2 0.2 0.2\n";
+        mtl += "Kd 1.0 1.0 1.0\n";
+        mtl += "Ks 0.0 0.0 0.0\n";
+        mtl += "Ns 10.0\n";
+        mtl += "illum 2\n";
+        mtl += `map_Kd ${texFilename}\n`;
+
+        // --- 3. Build OBJ content ---
+        let obj = "# Terrain mesh exported from Noise & TerrainGen\n";
+        obj += "# https://github.com/Mclefti/NoiseAndTerrainGen\n";
+        obj += "mtllib terrain.mtl\n";
+        obj += "o Terrain\n";
+
+        // Vertices
+        for (let i = 0; i < pos.count; i++) {
+            obj += `v ${pos.getX(i).toFixed(6)} ${pos.getY(i).toFixed(6)} ${pos.getZ(i).toFixed(6)}\n`;
+        }
+
+        // Texture coordinates
+        if (uv) {
+            for (let i = 0; i < uv.count; i++) {
+                obj += `vt ${uv.getX(i).toFixed(6)} ${uv.getY(i).toFixed(6)}\n`;
+            }
+        }
+
+        // Normals
+        if (norm) {
+            for (let i = 0; i < norm.count; i++) {
+                obj += `vn ${norm.getX(i).toFixed(6)} ${norm.getY(i).toFixed(6)} ${norm.getZ(i).toFixed(6)}\n`;
+            }
+        }
+
+        // Use material
+        obj += `usemtl ${mtlName}\n`;
+
+        // Faces (1-indexed) — format: f v/vt/vn
+        const hasUV = !!uv;
+        const hasNorm = !!norm;
+
+        if (idx) {
+            for (let i = 0; i < idx.count; i += 3) {
+                const a = idx.getX(i) + 1;
+                const b = idx.getX(i + 1) + 1;
+                const c = idx.getX(i + 2) + 1;
+                if (hasUV && hasNorm) {
+                    obj += `f ${a}/${a}/${a} ${b}/${b}/${b} ${c}/${c}/${c}\n`;
+                } else if (hasNorm) {
+                    obj += `f ${a}//${a} ${b}//${b} ${c}//${c}\n`;
+                } else {
+                    obj += `f ${a} ${b} ${c}\n`;
+                }
+            }
+        } else {
+            for (let i = 0; i < pos.count; i += 3) {
+                const a = i + 1, b = i + 2, c = i + 3;
+                if (hasUV && hasNorm) {
+                    obj += `f ${a}/${a}/${a} ${b}/${b}/${b} ${c}/${c}/${c}\n`;
+                } else if (hasNorm) {
+                    obj += `f ${a}//${a} ${b}//${b} ${c}//${c}\n`;
+                } else {
+                    obj += `f ${a} ${b} ${c}\n`;
+                }
+            }
+        }
+
+        // --- 4. Package into ZIP and download ---
+        texCanvas.toBlob((pngBlob) => {
+            const zip = new JSZip();
+            zip.file("terrain.obj", obj);
+            zip.file("terrain.mtl", mtl);
+            zip.file(texFilename, pngBlob);
+
+            zip.generateAsync({ type: "blob" }).then((content) => {
+                const url = URL.createObjectURL(content);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "terrain_export.zip";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            });
+        }, "image/png");
+    }
+
     dispose() {
         if (this.animationId) cancelAnimationFrame(this.animationId);
         if (this._resizeObserver) this._resizeObserver.disconnect();

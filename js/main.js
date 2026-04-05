@@ -156,6 +156,11 @@ document.getElementById("terrain3dFullscreen").addEventListener("click", () => {
     if (terrainPreview) terrainPreview.fullscreen();
 });
 
+// Export OBJ
+document.getElementById("terrain3dExportOBJ").addEventListener("click", () => {
+    if (terrainPreview) terrainPreview.exportOBJ();
+});
+
 // Map download buttons
 document.querySelectorAll(".map-download-btn").forEach(btn => {
     btn.addEventListener("click", () => {
