@@ -1,14 +1,14 @@
 class PerlinNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("noise","array");
+        this.addOutput("noise", "array");
         this.properties = { frequency: 5, octaves: 1, amplitude: 1, offset: 0, seed: 1 };
-        this.addWidget("slider","Frequency",this.properties.frequency,{min:0,max:20,property:"frequency"});
-        this.addWidget("slider","Octaves",this.properties.octaves,{min:1,max:8,step:1,precision:0,property:"octaves"});
-        this.addWidget("slider","Amplitude",this.properties.amplitude,{min:0,max:5,property:"amplitude"});
-        this.addWidget("slider","Offset",this.properties.offset,{min:0,max:5,property:"offset"});
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0, max: 20, property: "frequency" });
+        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 8, step: 1, precision: 0, property: "octaves" });
+        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, property: "amplitude" });
+        this.addWidget("slider", "Offset", this.properties.offset, { min: 0, max: 5, property: "offset" });
         this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
-        this.title="Perlin";
+        this.title = "Perlin";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -130,15 +130,15 @@ LiteGraph.registerNodeType("Generator/Perlin", PerlinNode);
 class SimplexNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("noise","array");
+        this.addOutput("noise", "array");
         this.properties = { frequency: 5, octaves: 1, amplitude: 1, offset: 0, seed: 1 };
-        this.addWidget("slider","Frequency",this.properties.frequency,{min:0,max:20,property:"frequency"});
-        this.addWidget("slider","Octaves",this.properties.octaves,{min:1,max:5,step:1,precision:0,property:"octaves"});
-        this.addWidget("slider","Amplitude",this.properties.amplitude,{min:0,max:5,property:"amplitude"});
-        this.addWidget("slider","Offset",this.properties.offset,{min:0,max:5,property:"offset"});
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0, max: 20, property: "frequency" });
+        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 5, step: 1, precision: 0, property: "octaves" });
+        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, property: "amplitude" });
+        this.addWidget("slider", "Offset", this.properties.offset, { min: 0, max: 5, property: "offset" });
         this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
 
-        this.title="Simplex";
+        this.title = "Simplex";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -254,20 +254,20 @@ class SimplexNode extends GPUNodeBase {
         this.drawPreviewTexture();
     }
 }
-LiteGraph.registerNodeType("Generator/Simplex",SimplexNode);
+LiteGraph.registerNodeType("Generator/Simplex", SimplexNode);
 
 class DirectionalNoiseNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("noise","array");
+        this.addOutput("noise", "array");
         this.properties = { frequency: 5, stretch: 20, amplitude: 1, angle: 0, seed: 1 };
-        this.addWidget("slider","Frequency",this.properties.frequency,{min:0.1,max:20,property:"frequency"});
-        this.addWidget("slider","Stretch",this.properties.stretch,{min:0,max:50,property:"stretch"});
-        this.addWidget("slider","Amplitude",this.properties.amplitude,{min:0,max:5,property:"amplitude"});
-        this.addWidget("slider","Angle",this.properties.angle,{min:0,max: 360,property:"angle"});
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.1, max: 20, property: "frequency" });
+        this.addWidget("slider", "Stretch", this.properties.stretch, { min: 0, max: 50, property: "stretch" });
+        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, property: "amplitude" });
+        this.addWidget("slider", "Angle", this.properties.angle, { min: 0, max: 360, property: "angle" });
         this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
 
-        this.title="DirectionalNoise";
+        this.title = "DirectionalNoise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -353,14 +353,14 @@ class DirectionalNoiseNode extends GPUNodeBase {
         this.drawPreviewTexture();
     }
 }
-LiteGraph.registerNodeType("Generator/DirectionalNoise",DirectionalNoiseNode);
+LiteGraph.registerNodeType("Generator/DirectionalNoise", DirectionalNoiseNode);
 
 class FormulaXYNode extends GPUNodeBase {
     constructor() {
         super();
         this.properties = { formula: "x*y" };
         this.addWidget("text", "Formula", this.properties.formula, { property: "formula" });
-        this.addOutput("out","array");
+        this.addOutput("out", "array");
         this.title = "FormulaXY";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -640,7 +640,7 @@ LiteGraph.registerNodeType("Generator/Truchet Tiles", TruchetNode);
 class StripesNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("out","array");
+        this.addOutput("out", "array");
         this.properties = {
             frequency: 10,
             width: 0.5,
@@ -648,10 +648,10 @@ class StripesNode extends GPUNodeBase {
             vertical: true
         };
 
-        this.addWidget("slider","Frequency",this.properties.frequency,{min:1,max:50,property:"frequency"});
-        this.addWidget("slider","Width",this.properties.width,{min:0.01,max:1,property:"width"});
-        this.addWidget("slider","Softness",this.properties.softness,{min:0,max:0.5,property:"softness"});
-        this.addWidget("toggle","Vertical",this.properties.vertical,{property:"vertical"});
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 1, max: 50, property: "frequency" });
+        this.addWidget("slider", "Width", this.properties.width, { min: 0.01, max: 1, property: "width" });
+        this.addWidget("slider", "Softness", this.properties.softness, { min: 0, max: 0.5, property: "softness" });
+        this.addWidget("toggle", "Vertical", this.properties.vertical, { property: "vertical" });
 
         this.title = "Stripes";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -708,16 +708,16 @@ LiteGraph.registerNodeType("Generator/Stripes", StripesNode);
 class GradientNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("out","array");
+        this.addOutput("out", "array");
         this.properties = { type: "Horizontal", invert: false };
 
-        this.addWidget("combo","Type",this.properties.type,{
-            values: ["Horizontal","Vertical","Radial"],
-            property:"type"
+        this.addWidget("combo", "Type", this.properties.type, {
+            values: ["Horizontal", "Vertical", "Radial"],
+            property: "type"
         });
-        this.addWidget("toggle","Invert",this.properties.invert,{property:"invert"});
+        this.addWidget("toggle", "Invert", this.properties.invert, { property: "invert" });
 
-        this.title="Gradient";
+        this.title = "Gradient";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -741,7 +741,7 @@ class GradientNode extends GPUNodeBase {
             fragColor = vec4(val,0.0,0.0,1.0);
         }`;
 
-        const typeIdx = ["Horizontal","Vertical","Radial"].indexOf(this.properties.type);
+        const typeIdx = ["Horizontal", "Vertical", "Radial"].indexOf(this.properties.type);
 
         this.runShader(
             `gradient`,
@@ -760,10 +760,10 @@ LiteGraph.registerNodeType("Generator/Gradient", GradientNode);
 class WhiteNoiseNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("out","array");
+        this.addOutput("out", "array");
         this.properties = { seed: 1 };
         this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0, property: "seed" });
-        this.title="White Noise";
+        this.title = "White Noise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -804,9 +804,9 @@ class VoronoiNode extends GPUNodeBase {
         this.properties = { scale: 40, seed: 1, type: "Distance" };
         this.addWidget("slider", "Scale", this.properties.scale, { min: 1, max: 100, step: 1, precision: 0, property: "scale" });
         this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0, property: "seed" });
-        this.addWidget("combo","Type",this.properties.type,{
-            values: ["Distance","FlatCell"],
-            property:"type"
+        this.addWidget("combo", "Type", this.properties.type, {
+            values: ["Distance", "FlatCell"],
+            property: "type"
         });
         this.title = "Voronoi";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -880,13 +880,13 @@ class VoronoiNode extends GPUNodeBase {
             fragColor = vec4(vec3(v), 1.0);
         }`;
 
-        const typeIdx = ["Distance","FlatCell"].indexOf(this.properties.type);
+        const typeIdx = ["Distance", "FlatCell"].indexOf(this.properties.type);
 
         this.runShader(
             "voronoiGPU",
             frag,
             0,
-            { seed: this.properties.seed, scale: this.properties.scale * 0.005, typeIdx: { type: "int", value: typeIdx }  }
+            { seed: this.properties.seed, scale: this.properties.scale * 0.005, typeIdx: { type: "int", value: typeIdx } }
         );
         this.setOutputTexture();
         this.drawPreviewTexture();
@@ -897,14 +897,14 @@ LiteGraph.registerNodeType("Generator/Voronoi", VoronoiNode);
 class CellNoiseNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("out","array");
+        this.addOutput("out", "array");
         this.properties = { points: 20, thickness: 3, seed: 1 };
 
-        this.addWidget("slider","Points",this.properties.points,{min:1,max:100,property:"points"});
-        this.addWidget("slider","Thickness",this.properties.thickness,{min:0.1,max:20,property:"thickness"});
+        this.addWidget("slider", "Points", this.properties.points, { min: 1, max: 100, property: "points" });
+        this.addWidget("slider", "Thickness", this.properties.thickness, { min: 0.1, max: 20, property: "thickness" });
         this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0, property: "seed" });
 
-        this.title="Cell Noise";
+        this.title = "Cell Noise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -959,12 +959,12 @@ LiteGraph.registerNodeType("Generator/CellNoise", CellNoiseNode);
 class CircleNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("out","array");
-        this.properties = { radius: 0.25, x:0.5, y:0.5 }; // normalized coords
-        this.addWidget("slider","Radius",this.properties.radius,{min:0,max:0.5,property:"radius"});
-        this.addWidget("slider","X",this.properties.x,{min:0,max:1,property:"x"});
-        this.addWidget("slider","Y",this.properties.y,{min:0,max:1,property:"y"});
-        this.title="Circle";
+        this.addOutput("out", "array");
+        this.properties = { radius: 0.25, x: 0.5, y: 0.5 }; // normalized coords
+        this.addWidget("slider", "Radius", this.properties.radius, { min: 0, max: 0.5, property: "radius" });
+        this.addWidget("slider", "X", this.properties.x, { min: 0, max: 1, property: "x" });
+        this.addWidget("slider", "Y", this.properties.y, { min: 0, max: 1, property: "y" });
+        this.title = "Circle";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
@@ -997,27 +997,27 @@ class CircleNode extends GPUNodeBase {
     }
 }
 
-LiteGraph.registerNodeType("Generator/Circle",CircleNode);
+LiteGraph.registerNodeType("Generator/Circle", CircleNode);
 
 class DotsNode extends GPUNodeBase {
     constructor() {
         super();
-        this.addOutput("out","array");
+        this.addOutput("out", "array");
         this.properties = {
             spacing: 0.1,   // 0..1 normalized spacing
             radius: 0.03,   // radius of dots
             softness: 0.01, // edge softness
             stagger: false
         };
-        this.addWidget("slider","Spacing",this.properties.spacing,{min:0.01,max:0.5,property:"spacing"});
-        this.addWidget("slider","Radius",this.properties.radius,{min:0.005,max:0.2,property:"radius"});
-        this.addWidget("slider","Softness",this.properties.softness,{min:0,max:0.1,property:"softness"});
-        this.addWidget("toggle","Stagger",this.properties.stagger,{property:"stagger"});
-        this.title="Dots";
-        this.size[1]+=PREVIEW_H+PREVIEW_PADDING;
+        this.addWidget("slider", "Spacing", this.properties.spacing, { min: 0.01, max: 0.5, property: "spacing" });
+        this.addWidget("slider", "Radius", this.properties.radius, { min: 0.005, max: 0.2, property: "radius" });
+        this.addWidget("slider", "Softness", this.properties.softness, { min: 0, max: 0.1, property: "softness" });
+        this.addWidget("toggle", "Stagger", this.properties.stagger, { property: "stagger" });
+        this.title = "Dots";
+        this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
 
-    onExecute(){
+    onExecute() {
         const fs = `#version 300 es
         precision highp float;
         uniform float spacing;
@@ -1047,7 +1047,7 @@ class DotsNode extends GPUNodeBase {
             `dots`,
             fs,
             0,
-            { spacing:this.properties.spacing, radius:this.properties.radius, softness:this.properties.softness, stagger:this.properties.stagger ? 1 : 0 },
+            { spacing: this.properties.spacing, radius: this.properties.radius, softness: this.properties.softness, stagger: this.properties.stagger ? 1 : 0 },
         );
 
         this.setOutputTexture();
@@ -1055,7 +1055,7 @@ class DotsNode extends GPUNodeBase {
     }
 }
 
-LiteGraph.registerNodeType("Generator/Dots",DotsNode);
+LiteGraph.registerNodeType("Generator/Dots", DotsNode);
 
 class RidgedNoiseNode extends GPUNodeBase {
     constructor() {
@@ -1174,7 +1174,7 @@ class RidgedNoiseNode extends GPUNodeBase {
             0,
             {
                 scale: this.properties.scale * 0.01,
-                octaves: { type:"int", value: this.properties.octaves },
+                octaves: { type: "int", value: this.properties.octaves },
                 seed: this.properties.seed
             }
         );
@@ -1195,16 +1195,16 @@ class WaveInterferenceNode extends GPUNodeBase {
         this.addOutput("out", "array");
         this.properties = {
             frequency: 2.0,
-            sources:   5,
-            phase:     0,
-            decay:     0,
-            seed:      1
+            sources: 5,
+            phase: 0,
+            decay: 0,
+            seed: 1
         };
         this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.001, max: 5.000, property: "frequency" });
-        this.addWidget("slider", "Sources",   this.properties.sources,   { min: 1,   max: 32,  step: 1, precision: 0, property: "sources" });
-        this.addWidget("slider", "Phase",     this.properties.phase,     { min: 0,   max: 6.2832, property: "phase" });
-        this.addWidget("slider", "Decay",     this.properties.decay,     { min: 0,   max: 10,  property: "decay" });
-        this.addWidget("slider", "Seed",      this.properties.seed,      { min: 1,   max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Sources", this.properties.sources, { min: 1, max: 32, step: 1, precision: 0, property: "sources" });
+        this.addWidget("slider", "Phase", this.properties.phase, { min: 0, max: 6.2832, property: "phase" });
+        this.addWidget("slider", "Decay", this.properties.decay, { min: 0, max: 10, property: "decay" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
         this.title = "Wave Interference";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -1256,10 +1256,10 @@ class WaveInterferenceNode extends GPUNodeBase {
             0,
             {
                 frequency: this.properties.frequency,
-                sources:   { type: "int", value: Math.round(this.properties.sources) },
-                phase:     this.properties.phase,
-                decay:     this.properties.decay,
-                seed:      this.properties.seed
+                sources: { type: "int", value: Math.round(this.properties.sources) },
+                phase: this.properties.phase,
+                decay: this.properties.decay,
+                seed: this.properties.seed
             }
         );
 
@@ -1279,17 +1279,17 @@ class HarmonicNode extends GPUNodeBase {
         super();
         this.addOutput("out", "array");
         this.properties = {
-            frequency:    2.0,
-            harmonics:    6,
-            falloff:      0.5,
+            frequency: 2.0,
+            harmonics: 6,
+            falloff: 0.5,
             angle_spread: 1.0,
-            seed:         1
+            seed: 1
         };
-        this.addWidget("slider", "Frequency",    this.properties.frequency,    { min: 0.001, max: 5.000,  property: "frequency" });
-        this.addWidget("slider", "Harmonics",    this.properties.harmonics,    { min: 1,   max: 16, step: 1, precision: 0, property: "harmonics" });
-        this.addWidget("slider", "Falloff",      this.properties.falloff,      { min: 0.1, max: 1.0, property: "falloff" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.001, max: 5.000, property: "frequency" });
+        this.addWidget("slider", "Harmonics", this.properties.harmonics, { min: 1, max: 16, step: 1, precision: 0, property: "harmonics" });
+        this.addWidget("slider", "Falloff", this.properties.falloff, { min: 0.1, max: 1.0, property: "falloff" });
         this.addWidget("slider", "Angle Spread", this.properties.angle_spread, { min: 0.0, max: 1.0, property: "angle_spread" });
-        this.addWidget("slider", "Seed",         this.properties.seed,         { min: 1,   max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
         this.title = "Harmonic";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -1342,11 +1342,11 @@ class HarmonicNode extends GPUNodeBase {
             frag,
             0,
             {
-                frequency:    this.properties.frequency,
-                harmonics:    { type: "int", value: Math.round(this.properties.harmonics) },
-                falloff:      this.properties.falloff,
+                frequency: this.properties.frequency,
+                harmonics: { type: "int", value: Math.round(this.properties.harmonics) },
+                falloff: this.properties.falloff,
                 angle_spread: this.properties.angle_spread,
-                seed:         this.properties.seed
+                seed: this.properties.seed
             }
         );
 
@@ -1355,4 +1355,388 @@ class HarmonicNode extends GPUNodeBase {
     }
 }
 
-LiteGraph.registerNodeType("Generator/Harmonic", HarmonicNode);
+LiteGraph.registerNodeType("Generator/Harmonic", HarmonicNode);
+
+// ============================================================
+// Image Source Node — Upload an image and use as noise data
+// ============================================================
+class ImageNode extends GPUNodeBase {
+    constructor() {
+        super();
+        this.addOutput("noise", "array");
+        this.properties = { fit: "Stretch", heightMode: "Luminance", contrast: 2.0, smooth: 0 };
+        this.addWidget("combo", "Fit Mode", this.properties.fit, (v) => {
+            this.properties.fit = v;
+            if (this._img.src) this._processImage();
+        }, { values: ["Stretch", "Fit"], property: "fit" });
+
+        this.addWidget("combo", "Height Mode", this.properties.heightMode, (v) => {
+            this.properties.heightMode = v;
+            if (this._img.src) this._processImage();
+        }, { values: ["Luminance", "Average", "Topographic"], property: "heightMode" });
+
+        this.addWidget("slider", "Contrast", this.properties.contrast, (v) => {
+            this.properties.contrast = v;
+            if (this._img.src) this._processImage();
+        }, { min: 0.5, max: 5, property: "contrast" });
+
+        this.addWidget("slider", "Smooth", this.properties.smooth, (v) => {
+            this.properties.smooth = v;
+            if (this._img.src) this._processImage();
+        }, { min: 0, max: 100, step: 1, precision: 0, property: "smooth" });
+
+        this.title = "Image";
+
+        this._fileInput = document.createElement("input");
+        this._fileInput.type = "file";
+        this._fileInput.accept = "image/*";
+        this._fileInput.style.display = "none";
+        this._fileInput.onchange = this._onFileSelected.bind(this);
+
+        this._img = new Image();
+        this._img.onload = this._onImageLoaded.bind(this);
+
+        this._status = "No image";
+        this._statusColor = "#888";
+        this._needsUpload = false;
+        this._pixelData = null;
+
+        this.size = [180, 320];
+    }
+
+    rebuildTextures() {
+        super.rebuildTextures();
+        if (this._img.src) this._processImage();
+    }
+
+    onDrawForeground(ctx) {
+        if (this.flags.collapsed) return;
+        const w = this.size[0];
+
+        // Status text
+        ctx.fillStyle = this._statusColor;
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(this._status, w / 2, 140);
+
+        // "Load Image" button
+        const btnX = 15;
+        const btnY = 130;
+        const btnW = w - 30;
+        const btnH = 26;
+
+        ctx.fillStyle = "#2a5a4a";
+        ctx.strokeStyle = "#3b8f6f";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(btnX, btnY, btnW, btnH, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#a1dcdb";
+        ctx.font = "bold 12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("📂 Load Image", w / 2, btnY + 17);
+
+        ctx.textAlign = "left";
+    }
+
+    onMouseDown(e, localPos) {
+        const btnX = 15;
+        const btnY = 140;
+        const btnW = this.size[0] - 30;
+        const btnH = 26;
+
+        if (localPos[0] >= btnX && localPos[0] <= btnX + btnW &&
+            localPos[1] >= btnY && localPos[1] <= btnY + btnH) {
+            this._fileInput.click();
+            return true;
+        }
+    }
+
+    _onFileSelected(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        this._status = "Loading...";
+        this._statusColor = "#a1dcdb";
+
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            this._img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    _onImageLoaded() {
+        this._processImage();
+    }
+
+    /**
+     * Convert RGB to HSL.
+     * Returns [h, s, l] where h is in [0, 360), s and l are in [0, 1].
+     */
+    _rgbToHsl(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        const l = (max + min) / 2;
+        const d = max - min; // Chroma
+
+        if (max === min) return [0, 0, l, 0]; // achromatic
+
+        const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        let h;
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0));
+        else if (max === g) h = ((b - r) / d + 2);
+        else h = ((r - g) / d + 4);
+        h *= 60;
+
+        return [h, s, l, d];
+    }
+
+    /**
+     * Map a topographic color-ramp pixel to a 0..1 height.
+     * Uses hue as primary elevation indicator, with lightness for fine detail.
+     * Color ramp: blue/cyan (low) → green → yellow → orange → red → pink → white (high)
+     */
+    _topoHeight(r, g, b) {
+        const [h, s, l, chroma] = this._rgbToHsl(r, g, b);
+
+        let height;
+
+        // Map hue to a continuous elevation value.
+        // The topographic color ramp goes around the hue wheel:
+        if (h >= 200 && h < 260) {
+            // Deep blue → lowest
+            height = 0.0 + ((260 - h) / 60) * 0.05;
+        } else if (h >= 180 && h < 200) {
+            // Cyan → low
+            height = 0.05 + ((200 - h) / 20) * 0.10;
+        } else if (h >= 140 && h < 180) {
+            // Cyan-green → low-mid
+            height = 0.15 + ((180 - h) / 40) * 0.15;
+        } else if (h >= 100 && h < 140) {
+            // Green → mid
+            height = 0.30 + ((140 - h) / 40) * 0.15;
+        } else if (h >= 70 && h < 100) {
+            // Yellow-green → mid-high
+            height = 0.45 + ((100 - h) / 30) * 0.10;
+        } else if (h >= 45 && h < 70) {
+            // Yellow → high
+            height = 0.55 + ((70 - h) / 25) * 0.10;
+        } else if (h >= 25 && h < 45) {
+            // Orange → higher
+            height = 0.65 + ((45 - h) / 20) * 0.10;
+        } else if (h >= 10 && h < 25) {
+            // Red-orange → very high
+            height = 0.75 + ((25 - h) / 15) * 0.05;
+        } else if (h >= 0 && h < 10) {
+            // Red → very high
+            height = 0.80 + ((10 - h) / 10) * 0.05;
+        } else if (h >= 340 && h < 360) {
+            // Pink/red → very high
+            height = 0.82 + ((360 - h) / 20) * 0.03;
+        } else if (h >= 300 && h < 340) {
+            // Pink/magenta → highest colored
+            height = 0.90 + ((340 - h) / 40) * 0.05;
+        } else if (h >= 260 && h < 300) {
+            // Purple-blue → low
+            height = 0.02 + ((h - 260) / 40) * 0.03;
+        } else {
+            height = l;
+        }
+
+        // Use lightness to add fine detail within each hue band
+        // Lighter tones within the same hue = slightly higher elevation
+        height += (l - 0.5) * 0.10;
+
+        // When color vanishes (e.g. pure white snowcaps or dark shadows), Hue becomes mathematically meaningless.
+        // We smoothly transition strictly to Lightness to form perfect peaks (1.0) and pits (0.0),
+        // completely avoiding artificial manipulation or forced ramps on colored terrain.
+        if (chroma < 0.2) {
+            let fade = (0.2 - chroma) / 0.2; // 0.0 at c=0.2, 1.0 at c=0.0
+            height = height * (1 - fade) + l * fade;
+        }
+
+        return Math.max(0, Math.min(1, height));
+    }
+
+    _processImage() {
+        if (!this._img.complete) return;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+        const ctx2 = canvas.getContext("2d");
+
+        // Fill background black for fit letterboxing
+        ctx2.fillStyle = "black";
+        ctx2.fillRect(0, 0, WIDTH, HEIGHT);
+
+        if (this.properties.fit === "Stretch") {
+            ctx2.drawImage(this._img, 0, 0, WIDTH, HEIGHT);
+        } else {
+            const aspect = this._img.width / this._img.height;
+            let w = WIDTH;
+            let h = HEIGHT;
+
+            if (aspect > 1) { // Wider than tall
+                h = WIDTH / aspect;
+            } else { // Taller than wide or square
+                w = HEIGHT * aspect;
+            }
+
+            ctx2.drawImage(this._img, (WIDTH - w) / 2, (HEIGHT - h) / 2, w, h);
+        }
+
+        const imgData = ctx2.getImageData(0, 0, WIDTH, HEIGHT).data;
+        this._pixelData = new Float32Array(WIDTH * HEIGHT);
+
+        const mode = this.properties.heightMode;
+        const contrast = this.properties.contrast;
+
+        // First pass: compute raw height values
+        for (let y = 0; y < HEIGHT; y++) {
+            for (let x = 0; x < WIDTH; x++) {
+                const srcIdx = (y * WIDTH + x) * 4;
+                const r = imgData[srcIdx + 0];
+                const g = imgData[srcIdx + 1];
+                const b = imgData[srcIdx + 2];
+
+                let v;
+                if (mode === "Topographic") {
+                    v = this._topoHeight(r, g, b);
+                } else if (mode === "Average") {
+                    v = (r + g + b) / (3 * 255);
+                } else {
+                    // Luminance (default)
+                    v = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                }
+                
+                // Canvas 'getImageData' maps 0,0 to the Top-Left. 
+                // WebGL texture arrays map 0,0 to the Bottom-Left. Fliping Y here right-sides the map!
+                const dstIdx = (HEIGHT - 1 - y) * WIDTH + x;
+                this._pixelData[dstIdx] = v;
+            }
+        }
+
+        // Second pass: auto-normalize to full 0..1 range, then apply contrast
+        let minVal = Infinity, maxVal = -Infinity;
+        for (let i = 0; i < this._pixelData.length; i++) {
+            if (this._pixelData[i] < minVal) minVal = this._pixelData[i];
+            if (this._pixelData[i] > maxVal) maxVal = this._pixelData[i];
+        }
+
+        const range = maxVal - minVal;
+        if (range > 0.001) {
+            for (let i = 0; i < this._pixelData.length; i++) {
+                // Normalize to 0..1
+                let v = (this._pixelData[i] - minVal) / range;
+                // Apply power curve for contrast/steepness
+                v = Math.pow(v, contrast);
+                this._pixelData[i] = v;
+            }
+        }
+
+        // Smoothing pass: Fast sliding-window box blur to melt flat plateaus & noise
+        // A radius-based blur run 3 times deeply mimics a true continuous Gaussian slope.
+        const radius = Math.round(this.properties.smooth);
+        if (radius > 0) {
+            const tmp = new Float32Array(WIDTH * HEIGHT);
+            const passes = 3; 
+            for (let pass = 0; pass < passes; pass++) {
+                // Horizontal pass
+                for (let y = 0; y < HEIGHT; y++) {
+                    let sum = 0, count = 0;
+                    for (let dx = -radius; dx <= radius; dx++) {
+                        if (dx >= 0 && dx < WIDTH) {
+                            sum += this._pixelData[y * WIDTH + dx];
+                            count++;
+                        }
+                    }
+                    tmp[y * WIDTH] = sum / count;
+                    
+                    for (let x = 1; x < WIDTH; x++) {
+                        let leftIdx = x - radius - 1;
+                        if (leftIdx >= 0) {
+                            sum -= this._pixelData[y * WIDTH + leftIdx];
+                            count--;
+                        }
+                        let rightIdx = x + radius;
+                        if (rightIdx < WIDTH) {
+                            sum += this._pixelData[y * WIDTH + rightIdx];
+                            count++;
+                        }
+                        tmp[y * WIDTH + x] = sum / count;
+                    }
+                }
+                // Vertical pass
+                for (let x = 0; x < WIDTH; x++) {
+                    let sum = 0, count = 0;
+                    for (let dy = -radius; dy <= radius; dy++) {
+                        if (dy >= 0 && dy < HEIGHT) {
+                            sum += tmp[dy * WIDTH + x];
+                            count++;
+                        }
+                    }
+                    this._pixelData[x] = sum / count;
+                    
+                    for (let y = 1; y < HEIGHT; y++) {
+                        let topIdx = y - radius - 1;
+                        if (topIdx >= 0) {
+                            sum -= tmp[topIdx * WIDTH + x];
+                            count--;
+                        }
+                        let bottomIdx = y + radius;
+                        if (bottomIdx < HEIGHT) {
+                            sum += tmp[bottomIdx * WIDTH + x];
+                            count++;
+                        }
+                        this._pixelData[y * WIDTH + x] = sum / count;
+                    }
+                }
+            }
+        }
+
+        this._needsUpload = true;
+        this._status = "Loaded";
+        this._statusColor = "#6f6";
+        this.setDirtyCanvas(true);
+        // Trigger graph execution so onExecute() picks up the new data
+        if (this.graph) {
+            this.graph.runStep();
+        }
+    }
+
+    onExecute() {
+        if (this._needsUpload && this._pixelData) {
+            this.updateInputTexture(0, this._pixelData);
+
+            // Simple pass-through shader to store result in this.outputTexture
+            this.runShader(
+                "image_source_copy",
+                `#version 300 es
+                precision highp float;
+                in vec2 vUv;
+                out vec4 fragColor;
+                uniform sampler2D tex0;
+                void main() {
+                    fragColor = texture(tex0, vUv);
+                }`,
+                1,
+                {},
+                this.framebuffer,
+                [this._inputTextures[0]]
+            );
+
+            this._needsUpload = false;
+        }
+
+        this.setOutputTexture();
+        this.drawPreviewTexture();
+    }
+}
+
+LiteGraph.registerNodeType("Generator/Image", ImageNode);

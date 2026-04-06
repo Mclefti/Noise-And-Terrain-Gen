@@ -30,8 +30,8 @@ class TerrainPreview {
 
         // Camera — near-top-down with a slight tilt to match 2D preview
         this.camera = new THREE.PerspectiveCamera(40, w / h, 0.01, 100);
-        this.camera.position.set(0, 1.1, 0.35);
-        this.camera.lookAt(0, 0, 0);
+        this.camera.position.set(0, 1.4, 0.6);
+        this.camera.lookAt(0, 0.15, 0);
 
         // Renderer — no tone mapping so vertex colors stay true
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -91,7 +91,7 @@ class TerrainPreview {
     /**
      * Update the terrain mesh with a float32 heightmap.
      */
-    update(floatArray, mapWidth, mapHeight, showWater = true) {
+    update(floatArray, mapWidth, mapHeight, showWater = true, heightScale = 1.0) {
         // Remove old meshes
         if (this.mesh) {
             this.scene.remove(this.mesh);
@@ -116,7 +116,7 @@ class TerrainPreview {
         const pos = geo.attributes.position;
         const colors = new Float32Array(pos.count * 3);
 
-        const heightScale = 0.12;
+
         // Water level: height value below which is "sea"
         const seaLevel = 0.15;
         const waterY = seaLevel * heightScale;
@@ -193,21 +193,21 @@ class TerrainPreview {
         ];
 
         if (h < 0.1) {
-            return mix([0, 0, 200/255], [0, 100/255, 1], h / 0.1);
+            return mix([0, 0, 200 / 255], [0, 100 / 255, 1], h / 0.1);
         }
         if (h < 0.2) {
-            return mix([0, 100/255, 1], [238/255, 214/255, 175/255], (h - 0.1) / 0.1);
+            return mix([0, 100 / 255, 1], [238 / 255, 214 / 255, 175 / 255], (h - 0.1) / 0.1);
         }
         if (h < 0.4) {
-            return mix([238/255, 214/255, 175/255], [34/255, 139/255, 34/255], (h - 0.2) / 0.2);
+            return mix([238 / 255, 214 / 255, 175 / 255], [34 / 255, 139 / 255, 34 / 255], (h - 0.2) / 0.2);
         }
         if (h < 0.6) {
-            return mix([34/255, 139/255, 34/255], [0, 100/255, 0], (h - 0.4) / 0.2);
+            return mix([34 / 255, 139 / 255, 34 / 255], [0, 100 / 255, 0], (h - 0.4) / 0.2);
         }
         if (h < 0.8) {
-            return mix([0, 100/255, 0], [139/255, 69/255, 19/255], (h - 0.6) / 0.2);
+            return mix([0, 100 / 255, 0], [139 / 255, 69 / 255, 19 / 255], (h - 0.6) / 0.2);
         }
-        return mix([139/255, 69/255, 19/255], [1, 1, 1], Math.min((h - 0.8) / 0.2, 1));
+        return mix([139 / 255, 69 / 255, 19 / 255], [1, 1, 1], Math.min((h - 0.8) / 0.2, 1));
     }
 
     fullscreen() {
@@ -234,8 +234,8 @@ class TerrainPreview {
         const geo = this.mesh.geometry;
         const pos = geo.attributes.position;
         const norm = geo.attributes.normal;
-        const uv  = geo.attributes.uv;
-        const col  = geo.attributes.color;
+        const uv = geo.attributes.uv;
+        const col = geo.attributes.color;
         const idx = geo.index;
 
         // --- 1. Bake vertex colors into a texture PNG ---

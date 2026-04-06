@@ -218,14 +218,15 @@ class GenerateTerrainNode extends NoiseNode {
         // Push widgets below the input slot so they don't block connections
         this.widgets_start_y = 36;
 
-        this.properties = { water: true, resolution: WIDTH };
+        this.properties = { water: true, resolution: WIDTH, heightScale: 0.5 };
         this.addWidget("toggle", "Water", true, { property: "water" });
         this.addWidget("combo", "Resolution", String(WIDTH), (v) => {
             this.properties.resolution = parseInt(v);
             if (typeof setResolution === "function") setResolution(this.properties.resolution);
         }, { values: ["32", "64", "128", "256", "512", "1024"] });
+        this.addWidget("slider", "Height Scale", this.properties.heightScale, { min: 0.1, max: 2.0, property: "heightScale" });
 
-        this.size = [220, 155];
+        this.size = [220, 175];
         this._busy = false;
         this._status = "Ready";
         this._statusColor = "#888";
@@ -234,7 +235,7 @@ class GenerateTerrainNode extends NoiseNode {
     }
 
     computeSize() {
-        return [220, 155];
+        return [220, 175];
     }
 
     onExecute() {
@@ -350,7 +351,7 @@ class GenerateTerrainNode extends NoiseNode {
 
             // 1. Update 3D terrain preview
             if (typeof terrainPreview !== "undefined" && terrainPreview) {
-                terrainPreview.update(input, WIDTH, HEIGHT, this.properties.water);
+                terrainPreview.update(input, WIDTH, HEIGHT, this.properties.water, this.properties.heightScale);
             }
 
             // 2. Heightmap greyscale card
@@ -395,4 +396,4 @@ class GenerateTerrainNode extends NoiseNode {
     }
 }
 
-LiteGraph.registerNodeType("Output/Generate Terrain", GenerateTerrainNode);
+LiteGraph.registerNodeType("Output/Generate Terrain", GenerateTerrainNode);
