@@ -3753,3 +3753,548 @@ const exampleWoodPlank = {
   "extra": {},
   "version": 0.4
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Experiment Pipeline Graphs (A–E)
+// Matches the exact parameters from run_experiment.py / server/core/experiment.py
+//   Phase I  freq=5.0, octaves=6 (A: octaves=1), persistence=0.5, lacunarity=2.0
+//   Phase II wave_count=8, wave_intensity=0.3 → WaveInterference sources=8, freq=2.0
+//   Phase IV erosion_iterations=10, thermal_rate=0.5
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Pipeline A — Raw Noise Baseline
+// Perlin (octaves=1, freq=5) → Generate Terrain
+const experimentPipelineA = {
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Generator/Perlin",
+      "pos": { "0": 80, "1": 150 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "noise", "type": "array", "links": [1], "slot_index": 0 }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 5,
+        "octaves": 1,
+        "amplitude": 1,
+        "offset": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 2,
+      "type": "Output/Generate Terrain",
+      "pos": { "0": 360, "1": 200 },
+      "size": [220, 130],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        { "name": "heightmap", "type": "array", "link": 1 }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": { "water": true }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "array"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+};
+
+// Pipeline B — fBm Baseline
+// Perlin (octaves=6, freq=5) → Generate Terrain
+const experimentPipelineB = {
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Generator/Perlin",
+      "pos": { "0": 80, "1": 150 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "noise", "type": "array", "links": [1], "slot_index": 0 }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 5,
+        "octaves": 6,
+        "amplitude": 1,
+        "offset": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 2,
+      "type": "Output/Generate Terrain",
+      "pos": { "0": 360, "1": 200 },
+      "size": [220, 130],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        { "name": "heightmap", "type": "array", "link": 1 }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": { "water": true }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "array"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+};
+
+// Pipeline C — fBm + Thermal Erosion
+// Perlin (octaves=6, freq=5) → Thermal Erosion (iter=10, rate=0.5) → Generate Terrain
+const experimentPipelineC = {
+  "last_node_id": 3,
+  "last_link_id": 2,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Generator/Perlin",
+      "pos": { "0": 80, "1": 150 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "noise", "type": "array", "links": [1], "slot_index": 0 }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 5,
+        "octaves": 6,
+        "amplitude": 1,
+        "offset": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 2,
+      "type": "Filter/Thermal Erosion",
+      "pos": { "0": 360, "1": 150 },
+      "size": { "0": 210, "1": 220 },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        { "name": "value", "type": "array", "link": 1 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [2], "slot_index": 0 }
+      ],
+      "title": "Thermal Erosion",
+      "properties": {
+        "iterations": 10,
+        "rate": 0.5
+      }
+    },
+    {
+      "id": 3,
+      "type": "Output/Generate Terrain",
+      "pos": { "0": 640, "1": 180 },
+      "size": [220, 130],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        { "name": "heightmap", "type": "array", "link": 2 }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": { "water": true }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 2, 0, "array"],
+    [2, 2, 0, 3, 0, "array"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+};
+
+// Pipeline D — Wave-Harmonic (no erosion)
+// Perlin (octaves=6, freq=5) + Wave Interference (sources=8, freq=2) → Covariant Curvature → Generate Terrain
+const experimentPipelineD = {
+  "last_node_id": 4,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Generator/Perlin",
+      "pos": { "0": 80, "1": 50 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "noise", "type": "array", "links": [1], "slot_index": 0 }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 5,
+        "octaves": 6,
+        "amplitude": 1,
+        "offset": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 2,
+      "type": "Generator/Wave Interference",
+      "pos": { "0": 80, "1": 410 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [2], "slot_index": 0 }
+      ],
+      "title": "Wave Interference",
+      "properties": {
+        "frequency": 2,
+        "sources": 8,
+        "phase": 0,
+        "decay": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 3,
+      "type": "Combine/Covariant Curvature",
+      "pos": { "0": 370, "1": 220 },
+      "size": { "0": 140, "1": 184 },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        { "name": "Base (P)", "type": "array", "link": 1 },
+        { "name": "Wave (ψ)", "type": "array", "link": 2 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [3], "slot_index": 0 }
+      ],
+      "title": "Covariant Curvature",
+      "properties": {}
+    },
+    {
+      "id": 4,
+      "type": "Output/Generate Terrain",
+      "pos": { "0": 580, "1": 245 },
+      "size": [220, 130],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        { "name": "heightmap", "type": "array", "link": 3 }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": { "water": true }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 3, 0, "array"],
+    [2, 2, 0, 3, 1, "array"],
+    [3, 3, 0, 4, 0, "array"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+};
+
+// Pipeline E — Wave-Harmonic (full — all 4 phases)
+// Perlin (octaves=6, freq=5) + Wave Interference (sources=8, freq=2) → Covariant Curvature → Thermal Erosion → Generate Terrain
+const experimentPipelineE = {
+  "last_node_id": 5,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Generator/Perlin",
+      "pos": { "0": 80, "1": 50 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "noise", "type": "array", "links": [1], "slot_index": 0 }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 5,
+        "octaves": 6,
+        "amplitude": 1,
+        "offset": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 2,
+      "type": "Generator/Wave Interference",
+      "pos": { "0": 80, "1": 410 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [2], "slot_index": 0 }
+      ],
+      "title": "Wave Interference",
+      "properties": {
+        "frequency": 2,
+        "sources": 8,
+        "phase": 0,
+        "decay": 0,
+        "seed": 1
+      }
+    },
+    {
+      "id": 3,
+      "type": "Combine/Covariant Curvature",
+      "pos": { "0": 370, "1": 220 },
+      "size": { "0": 140, "1": 184 },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        { "name": "Base (P)", "type": "array", "link": 1 },
+        { "name": "Wave (ψ)", "type": "array", "link": 2 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [3], "slot_index": 0 }
+      ],
+      "title": "Covariant Curvature",
+      "properties": {}
+    },
+    {
+      "id": 4,
+      "type": "Filter/Thermal Erosion",
+      "pos": { "0": 580, "1": 210 },
+      "size": { "0": 210, "1": 220 },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        { "name": "value", "type": "array", "link": 3 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [4], "slot_index": 0 }
+      ],
+      "title": "Thermal Erosion",
+      "properties": {
+        "iterations": 10,
+        "rate": 0.5
+      }
+    },
+    {
+      "id": 5,
+      "type": "Output/Generate Terrain",
+      "pos": { "0": 860, "1": 230 },
+      "size": [220, 130],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        { "name": "heightmap", "type": "array", "link": 4 }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": { "water": true }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 3, 0, "array"],
+    [2, 2, 0, 3, 1, "array"],
+    [3, 3, 0, 4, 0, "array"],
+    [4, 4, 0, 5, 0, "array"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+};
+
+const exampleCircularMountainWall = {
+  "last_node_id": 10,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 3,
+      "type": "Math/Subtract",
+      "pos": { "0": 417, "1": 295 },
+      "size": { "0": 140, "1": 184 },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        { "name": "A", "type": "array", "link": 1 },
+        { "name": "B", "type": "array", "link": 2 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [5], "slot_index": 0 }
+      ],
+      "title": "Subtract",
+      "properties": {}
+    },
+    {
+      "id": 6,
+      "type": "Filter/Blur",
+      "pos": { "0": 649, "1": 271 },
+      "size": { "0": 210, "1": 220 },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        { "name": "value", "type": "array", "link": 5 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [10], "slot_index": 0 }
+      ],
+      "title": "Blur",
+      "properties": {
+        "amount": 3.6,
+        "passes": 3
+      }
+    },
+    {
+      "id": 9,
+      "type": "Math/Multiply",
+      "pos": { "0": 1007, "1": 375 },
+      "size": { "0": 140, "1": 184 },
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        { "name": "A", "type": "array", "link": 10 },
+        { "name": "B", "type": "array", "link": 11 }
+      ],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [12], "slot_index": 0 }
+      ],
+      "title": "Multiply",
+      "properties": {}
+    },
+    {
+      "id": 1,
+      "type": "Generator/Circle",
+      "pos": { "0": 110, "1": 269 },
+      "size": { "0": 210, "1": 244 },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [1], "slot_index": 0 }
+      ],
+      "title": "Circle",
+      "properties": {
+        "radius": 0.58,
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": 2,
+      "type": "Generator/Circle",
+      "pos": { "0": 120, "1": 559 },
+      "size": { "0": 210, "1": 244 },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "out", "type": "array", "links": [2], "slot_index": 0 }
+      ],
+      "title": "Circle",
+      "properties": {
+        "radius": 0.50,
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": 10,
+      "type": "Output/Generate Terrain",
+      "pos": { "0": 1230, "1": 387 },
+      "size": [220, 175],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        { "name": "heightmap", "type": "array", "link": 12 }
+      ],
+      "outputs": [],
+      "title": "Generate Terrain",
+      "properties": {
+        "water": true,
+        "resolution": 1024,
+        "heightScale": 0.26
+      }
+    },
+    {
+      "id": 7,
+      "type": "Generator/Perlin",
+      "pos": { "0": 643, "1": 548 },
+      "size": { "0": 210, "1": 292 },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "noise", "type": "array", "links": [11], "slot_index": 0 }
+      ],
+      "title": "Perlin",
+      "properties": {
+        "frequency": 20,
+        "octaves": 2.3,
+        "amplitude": 1.0,
+        "offset": 0,
+        "seed": 330
+      }
+    }
+  ],
+  "links": [
+    [1, 1, 0, 3, 0, "array"],
+    [2, 2, 0, 3, 1, "array"],
+    [5, 3, 0, 6, 0, "array"],
+    [10, 6, 0, 9, 0, "array"],
+    [11, 7, 0, 9, 1, "array"],
+    [12, 9, 0, 10, 0, "array"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+};

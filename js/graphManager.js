@@ -2,73 +2,71 @@ let currentGraphId = null;
 let isLoadingGraph = false;
 let saveInternal;
 
-const GRAPH_STORAGE_KEY = "noiselab_graphs";
-const LAST_GRAPH_STORAGE_KEY = "noiselab_lastgraph";
+const GRAPH_STORAGE_KEY = "terraingen_graphs";
+const LAST_GRAPH_STORAGE_KEY = "terraingen_lastgraph";
 
 // Has graphs
-function hasGraphs()
-{
+function hasGraphs() {
     return localStorage.getItem(GRAPH_STORAGE_KEY) != undefined;
 }
 
 // Load graphs from local storage
-function loadAllGraphs()
-{
+function loadAllGraphs() {
     const stored = localStorage.getItem(GRAPH_STORAGE_KEY);
     return stored ? JSON.parse(stored) : {};
 }
 
 // Save all graphs back
-function saveAllGraphs(graphs)
-{
-    localStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(graphs));
+function saveAllGraphs(graphs) {
+    try {
+        localStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(graphs));
+    } catch (e) {
+        console.error("Local storage save failed:", e);
+        alert("Warning: Local Storage limit reached! The graph could not be saved automatically. Large images in Image Nodes may exceed the ~5MB browser limit. Delete unused graphs or export manually.");
+    }
 }
 
-function exportGraph(graph, name)
-{
-    if(!graph) return;
+function exportGraph(graph, name) {
+    if (!graph) return;
 
-    const dataStr = JSON.stringify(graph,null,2);
-    const blob = new Blob([dataStr], {type:"application/json"});
+    const dataStr = JSON.stringify(graph, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
 
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = name+".noiselab";
+    a.download = name + ".terraingen";
 
     a.click();
 }
 
-function importGraphFromJSON(json, name, idLabel, display = false)
-{
+function importGraphFromJSON(json, name, idLabel, display = false) {
     const graphs = loadAllGraphs();
     const id = "example_" + idLabel;
-    graphs[id] = {name, data: json, pinned:false};
+    graphs[id] = { name, data: json, pinned: false };
     saveAllGraphs(graphs);
-    
-    if (display)
-    {
+
+    if (display) {
         renderGraphList();
         loadGraphById(id);
     }
 }
 
-function importGraph(file)
-{
-    if(!file) return;
+function importGraph(file) {
+    if (!file) return;
 
     const reader = new FileReader();
     reader.onload = evt => {
-        try{
+        try {
             const data = JSON.parse(evt.target.result);
             const name = `${file.name}`;
             const graphs = loadAllGraphs();
             const id = "graph_" + Date.now();
-            graphs[id] = {name, data, pinned:false};
+            graphs[id] = { name, data, pinned: false };
             saveAllGraphs(graphs);
             renderGraphList();
             loadGraphById(id);
-        }catch(err){
-            alert("Failed to import: "+err.message);
+        } catch (err) {
+            alert("Failed to import: " + err.message);
         }
     };
     reader.readAsText(file);
@@ -86,13 +84,12 @@ function createNewGraph() {
 }
 
 
-function loadGraphById(id)
-{
+function loadGraphById(id) {
     clearTimeout(saveInternal);
 
     const graphs = loadAllGraphs();
     const g = graphs[id];
-    if(!g) return false;
+    if (!g) return false;
 
     currentGraphId = id;
     document.getElementById("currentGraphName").innerText = g.name;
@@ -108,14 +105,12 @@ function loadGraphById(id)
 }
 
 // Auto-save on changes
-function autoSaveGraph()
-{
+function autoSaveGraph() {
     // Prevent instant saving, which can cause slowdowns in large graphs
     clearTimeout(saveInternal)
     saveInternal = setTimeout(() => {
         if (isLoadingGraph) return;
-        if(!currentGraphId)
-        {
+        if (!currentGraphId) {
             // Editing a graph that does not exist. Register it as one
             const id = createNewGraph();
             currentGraphId = id;
@@ -126,7 +121,7 @@ function autoSaveGraph()
 
         saveAllGraphs(graphs);
     }, 100)
-    
+
 }
 
 // Render sidebar lists
@@ -137,7 +132,7 @@ function renderGraphList() {
 
     // Sort: pinned first, then newest/other
     const entries = Object.entries(graphs)
-        .sort(([idA, a],[idB,b]) => b.pinned - a.pinned); 
+        .sort(([idA, a], [idB, b]) => b.pinned - a.pinned);
 
     entries.forEach(([id, g]) => {
         const li = document.createElement("li");
@@ -145,7 +140,7 @@ function renderGraphList() {
         if (id == currentGraphId)
             li.classList.add("selected")
         li.title = g.name;
-        li.innerHTML = `<div class="graph-title"">${g.pinned ? '<i class="fas fa-thumbtack pinned-icon"></i>':''}${g.name}</div>
+        li.innerHTML = `<div class="graph-title"">${g.pinned ? '<i class="fas fa-thumbtack pinned-icon"></i>' : ''}${g.name}</div>
             <div class="graph-actions">
                 <button class="exportGraphBtn" title="Export"><i class="fas fa-file-export"></i></button>
                 <button class="pinGraphBtn" title="Pin/Unpin"><i class="fas fa-thumbtack"></i></button>
@@ -153,7 +148,7 @@ function renderGraphList() {
             </div>
         `;
         li.addEventListener("click", e => {
-            if(e.target.closest(".graph-actions")) return; // clicking actions should not load
+            if (e.target.closest(".graph-actions")) return; // clicking actions should not load
             loadGraphById(id);
         });
 
@@ -171,14 +166,13 @@ function renderGraphList() {
         }
         li.querySelector('.deleteGraphBtn').onclick = () => {
             const id = li.dataset.id;
-            if(!confirm("Delete this graph?")) return;
+            if (!confirm("Delete this graph?")) return;
 
             const graphs = loadAllGraphs();
             delete graphs[id];
             saveAllGraphs(graphs);
             renderGraphList();
-            if(currentGraphId === id)
-            {
+            if (currentGraphId === id) {
                 graph.clear();
                 document.getElementById("currentGraphName").innerText = "Untitled";
                 currentGraphId = null;
@@ -189,8 +183,7 @@ function renderGraphList() {
     });
 }
 
-async function initGraphManager(graphCanvasEl)
-{
+async function initGraphManager(graphCanvasEl) {
     // Create new graph
     document.getElementById("createGraphBtn").addEventListener("click", () => {
         const id = createNewGraph();
@@ -198,8 +191,8 @@ async function initGraphManager(graphCanvasEl)
     });
 
     // Rename current graph
-    document.getElementById("currentGraphName").addEventListener("blur", (e)=>{
-        if(!currentGraphId) return;
+    document.getElementById("currentGraphName").addEventListener("blur", (e) => {
+        if (!currentGraphId) return;
         const graphs = loadAllGraphs();
         graphs[currentGraphId].name = e.target.innerText.trim() || "Untitled";
         saveAllGraphs(graphs);
@@ -207,20 +200,29 @@ async function initGraphManager(graphCanvasEl)
     });
 
     // Export current graph
-    document.getElementById("exportBtn").addEventListener("click", ()=>{
-        if(!currentGraphId) return;
+    document.getElementById("exportBtn").addEventListener("click", () => {
+        if (!currentGraphId) return;
         const graphs = loadAllGraphs();
         exportGraph(graphs[currentGraphId].data, graphs[currentGraphId].name);
     });
 
     // Import graph
-    document.getElementById("importBtn").addEventListener("click", ()=>{
+    document.getElementById("importBtn").addEventListener("click", () => {
         document.getElementById("fileInput").click();
     });
 
-    document.getElementById("fileInput").addEventListener("change",(e)=>{
+    document.getElementById("fileInput").addEventListener("change", (e) => {
         const file = e.target.files[0];
         importGraph(file);
+    });
+
+    // Reset app
+    document.getElementById("resetAppBtn").addEventListener("click", () => {
+        if (confirm("WARNING: This will delete ALL your custom graphs and images, and restore the original example graphs. This cannot be undone. Are you sure?")) {
+            localStorage.removeItem(GRAPH_STORAGE_KEY);
+            localStorage.removeItem(LAST_GRAPH_STORAGE_KEY);
+            location.reload();
+        }
     });
 
     // Auto-save on graph changes (LiteGraph)
@@ -230,21 +232,21 @@ async function initGraphManager(graphCanvasEl)
     graphCanvas.onNodeMoved = autoSaveGraph;
 
     // Drag & drop import
-    graphCanvasEl.addEventListener("dragover", e=>{
+    graphCanvasEl.addEventListener("dragover", e => {
         e.preventDefault();
         e.dataTransfer.dropEffect = "copy";
     });
 
-    graphCanvasEl.addEventListener("drop", e=>{
+    graphCanvasEl.addEventListener("drop", e => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         importGraph(file);
     });
 
     // Filter/search
-    document.getElementById("graphSearch").addEventListener("input", (e)=>{
+    document.getElementById("graphSearch").addEventListener("input", (e) => {
         const filter = e.target.value.toLowerCase();
-        document.querySelectorAll("#yourGraphsList li").forEach(li=>{
+        document.querySelectorAll("#yourGraphsList li").forEach(li => {
             li.style.display = li.innerText.toLowerCase().includes(filter) ? "" : "none";
         });
     });
@@ -253,32 +255,55 @@ async function initGraphManager(graphCanvasEl)
 
     await sleep(0)
 
-    if (!hasGraphs())
-    {
+    if (!hasGraphs()) {
         // Load example graphs
         importGraphFromJSON(exampleIsland, "Island", "island");
         importGraphFromJSON(examplePixelRock, "Pixel Art Rocks", "pixelArtRocks");
         importGraphFromJSON(exampleWoodPlank, "Wood Planks", "wookPlanks");
         importGraphFromJSON(exampleEye, "Eye", "eye");
-        importGraphFromJSON(usingCovariantCurvature, "Covariant Curvature", "covariant_curvature", true);
+        importGraphFromJSON(usingCovariantCurvature, "Covariant Curvature", "covariant_curvature");
+        importGraphFromJSON(exampleCircularMountainWall, "Circular Mountain Wall", "circular_mountain_wall", true);
     }
-    else
-    {
+    else {
         const lastId = localStorage.getItem(LAST_GRAPH_STORAGE_KEY);
-        if (lastId)
-        {
+        if (lastId) {
             if (!loadGraphById(lastId))
                 renderGraphList();
         }
         else
             renderGraphList();
 
-        // Migration: Force import of new Covariant Curvature example if missing
+        // Migration: import any missing example/experiment graphs
         const graphs = loadAllGraphs();
+        let migrated = false;
+
         if (!graphs["example_covariant_curvature"]) {
             importGraphFromJSON(usingCovariantCurvature, "Covariant Curvature", "covariant_curvature");
+            migrated = true;
+        }
+
+        if (!graphs["example_circular_mountain_wall"]) {
+            importGraphFromJSON(exampleCircularMountainWall, "Circular Mountain Wall", "circular_mountain_wall");
+            migrated = true;
+        }
+
+        const deleteKeys = [
+            "example_exp_a_raw_noise", "example_exp_b_fbm", "example_exp_c_fbm_eroded", 
+            "example_exp_d_wave_harmonic", "example_exp_e_wave_harmonic_full"
+        ];
+        for (const key of deleteKeys) {
+            if (graphs[key]) {
+                delete graphs[key];
+                migrated = true;
+            }
+        }
+
+        if (migrated) {
+            saveAllGraphs(graphs);
             renderGraphList();
         }
+
+        if (migrated) renderGraphList();
     }
-    
+
 }

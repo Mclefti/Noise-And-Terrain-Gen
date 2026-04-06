@@ -8,7 +8,7 @@ class BlurNode extends GPUNodeBase {
         this.addInput("value", "array");
         this.addOutput("out", "array");
         this.properties = { amount: 2, passes: 3 };
-        this.addWidget("slider", "Amount", this.properties.amount, { min: 1, max: 10, property: "amount" });
+        this.addWidget("slider", "Amount", this.properties.amount, { min: 0.1, max: 20, step: 0.1, precision: 1, property: "amount" });
         this.addWidget("slider", "Passes", this.properties.passes, { min: 1, max: 5, step: 1, precision: 0, property: "passes" });
         this.title = "Blur";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;

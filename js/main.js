@@ -255,4 +255,103 @@ function terrainColorJS(h) {
     if (h < 0.8) return mix([0, 100, 0], [139, 69, 19], (h - 0.6) / 0.2);
     return mix([139, 69, 19], [255, 255, 255], Math.min((h - 0.8) / 0.2, 1));
 }
+
+// --- Parameter Tooltips ---
+const tooltipDiv = document.createElement('div');
+tooltipDiv.style.position = 'fixed';
+tooltipDiv.style.background = 'rgba(0, 0, 0, 0.85)';
+tooltipDiv.style.color = '#fff';
+tooltipDiv.style.padding = '8px 12px';
+tooltipDiv.style.borderRadius = '5px';
+tooltipDiv.style.pointerEvents = 'none';
+tooltipDiv.style.fontSize = '12px';
+tooltipDiv.style.maxWidth = '250px';
+tooltipDiv.style.display = 'none';
+tooltipDiv.style.zIndex = '99999';
+tooltipDiv.style.boxShadow = '0 4px 6px rgba(0,0,0,0.3)';
+document.body.appendChild(tooltipDiv);
+
+const widgetTooltips = {
+    "Amplitude": "Controls the maximum height (or intensity contrast) of the noise peaks and valleys, making the terrain appear either flat or deeply contrasted.",
+    "Angle": "Rotates the underlying pattern to change the base orientation of the generated features.",
+    "Angle Spread": "Determines the angular variance or scatter of geometric features, creating more chaotic or spread out formations.",
+    "Bevel (px)": "The pixel width of the slope applied to the edges of generated blocks or bricks, giving them a 3D rounded or chiselled appearance.",
+    "Bricks X": "The number of brick columns that fit horizontally across the generated pattern.",
+    "Bricks Y": "The number of brick rows that fit vertically across the generated pattern.",
+    "Contrast": "Enhances the difference between high and low values, pushing grays towards stark black and white.",
+    "Decay": "Controls how quickly a generated feature (like ripples or falloffs) fades out as it moves away from its source.",
+    "Falloff": "Adjusts the sharpness of the transition from the center of a feature to its edges.",
+    "Fit Mode": "Determines how an external image maps onto the terrain canvas, either stretching, tiling, or clipping.",
+    "Formula": "A custom mathematical expression used to shape or combine noise values directly.",
+    "Frequency": "Determines how 'zoomed in' or 'zoomed out' the noise appears, with higher values creating smaller, more densely packed terrain features.",
+    "Harmonics": "The number of layered frequency bands to combine, similar to octaves but often used for wave-based or localized functions.",
+    "Height Mode": "Selects which image channel or property (like luminance or a specific color channel) drives the actual terrain elevation.",
+    "Invert": "Flips the generator output so that previously high areas become valleys, and low areas become peaks.",
+    "Mortar (px)": "The pixel thickness of the gaps between bricks or tiles.",
+    "Octaves": "Controls the level of detail by layering multiple sub-layers of noise on top of each other to create rougher, more complex textures.",
+    "Offset": "Physically shifts or pans the entire generated noise pattern across the canvas without changing its underlying shape.",
+    "Phase": "Shifts the starting point of the wave or cyclic algorithm, offsetting the repeating pattern.",
+    "Points": "The number of distinct, scattered control points used by cell-based nodes like Voronoi or Worley noise.",
+    "Radius": "The size or extent of circular features or localized geometric shapes.",
+    "Scale": "Multiplies the overall dimensions or spacing of the generated pattern to make it globally larger or smaller.",
+    "Seed": "Provides a specific starting number for the random number generator, ensuring that the exact same random layout can be predictably recreated at any time.",
+    "Smooth": "Applies a blur or softening filter that rounds out harsh edges and high-frequency noise.",
+    "Softness": "Blends the edges of hard shapes seamlessly into their surroundings.",
+    "Sources": "The number of origin emitters or wave epicenters.",
+    "Spacing": "The distance padding kept between discrete generated shapes or points to prevent overlapping.",
+    "Squares": "The grid density used when creating checkered or blocky outputs.",
+    "Stagger": "Offsets alternating rows of patterns (like bricks) horizontally to create a traditional interlocking layout.",
+    "Stretch": "Warps the generated pattern by pulling it along a specific axis.",
+    "Thickness": "Defines the width of generated lines, borders, or cell walls in the texture.",
+    "Type": "Changes the underlying formula variant used to calculate the noise or shape.",
+    "Vertical": "A toggle or value to align features strictly along the Y-axis.",
+    "Width": "The horizontal span of specific rectangular features.",
+    "X": "The horizontal coordinate position of the feature's center.",
+    "Y": "The vertical coordinate position of the feature's center."
+};
+
+graphCanvasEl.addEventListener('mousemove', function(e) {
+    if (!graphCanvas) return;
+    
+    // Check if mouse is traversing any active node using litegraph's internal tracker
+    let node = graphCanvas.node_over;
+    if (!node || !node.widgets) {
+        tooltipDiv.style.display = 'none';
+        return;
+    }
+
+    // Native LiteGraph coordinates reliably account for pan/zoom
+    const localX = graphCanvas.graph_mouse[0] - node.pos[0];
+    const localY = graphCanvas.graph_mouse[1] - node.pos[1];
+    
+    let foundTooltip = false;
+
+    // Check hit box for widgets inside this node
+    for (let i = 0; i < node.widgets.length; i++) {
+        let w = node.widgets[i];
+        if (w.last_y !== undefined) {
+            let widget_height = w.computeSize ? w.computeSize(node.size[0])[1] : 20; // 20 is LiteGraph.NODE_WIDGET_HEIGHT
+            
+            // Console log tracking to locate bounding box failures
+            // console.log("Checking widget: " + w.name + ", localX: " + localX + ", localY: " + localY + ", last_y: " + w.last_y + ", hit: " + (localX > 6 && localX < node.size[0] - 12 && localY > w.last_y && localY < w.last_y + widget_height));
+
+            // Hitbox boundary matching LiteGraph's internal widget checking
+            if (localX > 6 && localX < node.size[0] - 12 && localY > w.last_y && localY < w.last_y + widget_height) {
+                if (widgetTooltips[w.name]) {
+                    tooltipDiv.innerHTML = "<strong>" + w.name + "</strong><br>" + widgetTooltips[w.name];
+                    tooltipDiv.style.display = 'block';
+                    // Position tooltip near the cursor
+                    tooltipDiv.style.left = (e.clientX + 15) + 'px';
+                    tooltipDiv.style.top = (e.clientY + 15) + 'px';
+                    foundTooltip = true;
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (!foundTooltip) {
+        tooltipDiv.style.display = 'none';
+    }
+});
 

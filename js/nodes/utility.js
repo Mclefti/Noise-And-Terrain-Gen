@@ -224,7 +224,7 @@ class GenerateTerrainNode extends NoiseNode {
             this.properties.resolution = parseInt(v);
             if (typeof setResolution === "function") setResolution(this.properties.resolution);
         }, { values: ["32", "64", "128", "256", "512", "1024"] });
-        this.addWidget("slider", "Height Scale", this.properties.heightScale, { min: 0.1, max: 2.0, property: "heightScale" });
+        this.addWidget("slider", "Height Scale", this.properties.heightScale, { min: 0.1, max: 2.0, step: 0.1, precision: 1, property: "heightScale" });
 
         this.size = [220, 175];
         this._busy = false;

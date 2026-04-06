@@ -3,11 +3,11 @@ class PerlinNode extends GPUNodeBase {
         super();
         this.addOutput("noise", "array");
         this.properties = { frequency: 5, octaves: 1, amplitude: 1, offset: 0, seed: 1 };
-        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0, max: 20, property: "frequency" });
-        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 8, step: 1, precision: 0, property: "octaves" });
-        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, property: "amplitude" });
-        this.addWidget("slider", "Offset", this.properties.offset, { min: 0, max: 5, property: "offset" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0, max: 20, step: 0.1, precision: 1, property: "frequency" });
+        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 8, step: 1, precision: 0,  property: "octaves" });
+        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, step: 0.1, precision: 1, property: "amplitude" });
+        this.addWidget("slider", "Offset", this.properties.offset, { min: 0, max: 5, step: 0.1, precision: 1, property: "offset" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
         this.title = "Perlin";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -132,11 +132,11 @@ class SimplexNode extends GPUNodeBase {
         super();
         this.addOutput("noise", "array");
         this.properties = { frequency: 5, octaves: 1, amplitude: 1, offset: 0, seed: 1 };
-        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0, max: 20, property: "frequency" });
-        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 5, step: 1, precision: 0, property: "octaves" });
-        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, property: "amplitude" });
-        this.addWidget("slider", "Offset", this.properties.offset, { min: 0, max: 5, property: "offset" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0, max: 20, step: 0.1, precision: 1, property: "frequency" });
+        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 5, step: 1, precision: 0,  property: "octaves" });
+        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, step: 0.1, precision: 1, property: "amplitude" });
+        this.addWidget("slider", "Offset", this.properties.offset, { min: 0, max: 5, step: 0.1, precision: 1, property: "offset" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
 
         this.title = "Simplex";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -261,11 +261,11 @@ class DirectionalNoiseNode extends GPUNodeBase {
         super();
         this.addOutput("noise", "array");
         this.properties = { frequency: 5, stretch: 20, amplitude: 1, angle: 0, seed: 1 };
-        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.1, max: 20, property: "frequency" });
-        this.addWidget("slider", "Stretch", this.properties.stretch, { min: 0, max: 50, property: "stretch" });
-        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, property: "amplitude" });
-        this.addWidget("slider", "Angle", this.properties.angle, { min: 0, max: 360, property: "angle" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.1, max: 20, step: 0.1, precision: 1, property: "frequency" });
+        this.addWidget("slider", "Stretch", this.properties.stretch, { min: 0, max: 50, step: 0.1, precision: 1, property: "stretch" });
+        this.addWidget("slider", "Amplitude", this.properties.amplitude, { min: 0, max: 5, step: 0.1, precision: 1, property: "amplitude" });
+        this.addWidget("slider", "Angle", this.properties.angle, { min: 0, max: 360, step: 0.1, precision: 1, property: "angle" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
 
         this.title = "DirectionalNoise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -389,7 +389,7 @@ class CheckerboardNode extends GPUNodeBase {
         super();
         this.addOutput("out", "array");
         this.properties = { squares: 32 };
-        this.addWidget("slider", "Squares", this.properties.squares, { min: 2, max: 128, step: 1, precision: 0, property: "squares" });
+        this.addWidget("slider", "Squares", this.properties.squares, { min: 2, max: 128, step: 1, precision: 0,  property: "squares" });
         this.title = "Checkerboard";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -427,7 +427,7 @@ class HexGridNode extends GPUNodeBase {
 
         this.properties = { scale: 40 };
 
-        this.addWidget("slider", "Scale", this.properties.scale, { min: 5, max: 200, property: "scale" });
+        this.addWidget("slider", "Scale", this.properties.scale, { min: 5, max: 200, step: 1, precision: 0,  property: "scale" });
 
         this.title = "Hex Grid";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -481,10 +481,10 @@ class BrickNode extends GPUNodeBase {
             bevel: 6     // in pixels
         };
 
-        this.addWidget("slider", "Bricks X", this.properties.bricksX, { min: 1, max: 50, step: 1, precision: 0, property: "bricksX" });
-        this.addWidget("slider", "Bricks Y", this.properties.bricksY, { min: 1, max: 50, step: 1, precision: 0, property: "bricksY" });
-        this.addWidget("slider", "Mortar (px)", this.properties.mortar, { min: 0, max: 20, property: "mortar" });
-        this.addWidget("slider", "Bevel (px)", this.properties.bevel, { min: 0, max: 50, property: "bevel" });
+        this.addWidget("slider", "Bricks X", this.properties.bricksX, { min: 1, max: 50, step: 1, precision: 0,  property: "bricksX" });
+        this.addWidget("slider", "Bricks Y", this.properties.bricksY, { min: 1, max: 50, step: 1, precision: 0,  property: "bricksY" });
+        this.addWidget("slider", "Mortar (px)", this.properties.mortar, { min: 0, max: 20, step: 0.1, precision: 1, property: "mortar" });
+        this.addWidget("slider", "Bevel (px)", this.properties.bevel, { min: 0, max: 50, step: 0.1, precision: 1, property: "bevel" });
 
         this.title = "Bricks";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -572,9 +572,9 @@ class TruchetNode extends GPUNodeBase {
 
         this.properties = { scale: 40, seed: 1, thickness: 0.08 };
 
-        this.addWidget("slider", "Scale", this.properties.scale, { min: 10, max: 100, property: "scale" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
-        this.addWidget("slider", "Thickness", this.properties.thickness, { min: 0.01, max: 0.3, property: "thickness" });
+        this.addWidget("slider", "Scale", this.properties.scale, { min: 10, max: 100, step: 1, precision: 0,  property: "scale" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
+        this.addWidget("slider", "Thickness", this.properties.thickness, { min: 0.01, max: 0.3, step: 0.1, precision: 1, property: "thickness" });
 
         this.title = "Truchet Tiles";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -648,9 +648,9 @@ class StripesNode extends GPUNodeBase {
             vertical: true
         };
 
-        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 1, max: 50, property: "frequency" });
-        this.addWidget("slider", "Width", this.properties.width, { min: 0.01, max: 1, property: "width" });
-        this.addWidget("slider", "Softness", this.properties.softness, { min: 0, max: 0.5, property: "softness" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 1, max: 50, step: 0.1, precision: 1, property: "frequency" });
+        this.addWidget("slider", "Width", this.properties.width, { min: 0.01, max: 1, step: 0.1, precision: 1, property: "width" });
+        this.addWidget("slider", "Softness", this.properties.softness, { min: 0, max: 0.5, step: 0.1, precision: 1, property: "softness" });
         this.addWidget("toggle", "Vertical", this.properties.vertical, { property: "vertical" });
 
         this.title = "Stripes";
@@ -762,7 +762,7 @@ class WhiteNoiseNode extends GPUNodeBase {
         super();
         this.addOutput("out", "array");
         this.properties = { seed: 1 };
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0, property: "seed" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
         this.title = "White Noise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -802,8 +802,8 @@ class VoronoiNode extends GPUNodeBase {
         super();
         this.addOutput("out", "array");
         this.properties = { scale: 40, seed: 1, type: "Distance" };
-        this.addWidget("slider", "Scale", this.properties.scale, { min: 1, max: 100, step: 1, precision: 0, property: "scale" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0, property: "seed" });
+        this.addWidget("slider", "Scale", this.properties.scale, { min: 1, max: 100, step: 1, precision: 0,  property: "scale" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
         this.addWidget("combo", "Type", this.properties.type, {
             values: ["Distance", "FlatCell"],
             property: "type"
@@ -900,9 +900,9 @@ class CellNoiseNode extends GPUNodeBase {
         this.addOutput("out", "array");
         this.properties = { points: 20, thickness: 3, seed: 1 };
 
-        this.addWidget("slider", "Points", this.properties.points, { min: 1, max: 100, property: "points" });
-        this.addWidget("slider", "Thickness", this.properties.thickness, { min: 0.1, max: 20, property: "thickness" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0, property: "seed" });
+        this.addWidget("slider", "Points", this.properties.points, { min: 1, max: 100, step: 1, precision: 0,  property: "points" });
+        this.addWidget("slider", "Thickness", this.properties.thickness, { min: 0.1, max: 20, step: 0.1, precision: 1, property: "thickness" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
 
         this.title = "Cell Noise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -961,9 +961,9 @@ class CircleNode extends GPUNodeBase {
         super();
         this.addOutput("out", "array");
         this.properties = { radius: 0.25, x: 0.5, y: 0.5 }; // normalized coords
-        this.addWidget("slider", "Radius", this.properties.radius, { min: 0, max: 0.5, property: "radius" });
-        this.addWidget("slider", "X", this.properties.x, { min: 0, max: 1, property: "x" });
-        this.addWidget("slider", "Y", this.properties.y, { min: 0, max: 1, property: "y" });
+        this.addWidget("slider", "Radius", this.properties.radius, { min: 0, max: 2.0, step: 0.01, precision: 2, property: "radius" });
+        this.addWidget("slider", "X", this.properties.x, { min: -1.0, max: 2.0, step: 0.01, precision: 2, property: "x" });
+        this.addWidget("slider", "Y", this.properties.y, { min: -1.0, max: 2.0, step: 0.01, precision: 2, property: "y" });
         this.title = "Circle";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -1009,9 +1009,9 @@ class DotsNode extends GPUNodeBase {
             softness: 0.01, // edge softness
             stagger: false
         };
-        this.addWidget("slider", "Spacing", this.properties.spacing, { min: 0.01, max: 0.5, property: "spacing" });
-        this.addWidget("slider", "Radius", this.properties.radius, { min: 0.005, max: 0.2, property: "radius" });
-        this.addWidget("slider", "Softness", this.properties.softness, { min: 0, max: 0.1, property: "softness" });
+        this.addWidget("slider", "Spacing", this.properties.spacing, { min: 0.01, max: 0.5, step: 0.1, precision: 1, property: "spacing" });
+        this.addWidget("slider", "Radius", this.properties.radius, { min: 0.005, max: 0.2, step: 0.1, precision: 1, property: "radius" });
+        this.addWidget("slider", "Softness", this.properties.softness, { min: 0, max: 0.1, step: 0.1, precision: 1, property: "softness" });
         this.addWidget("toggle", "Stagger", this.properties.stagger, { property: "stagger" });
         this.title = "Dots";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -1064,9 +1064,9 @@ class RidgedNoiseNode extends GPUNodeBase {
 
         this.properties = { scale: 50, octaves: 4, seed: 1 };
 
-        this.addWidget("slider", "Scale", this.properties.scale, { min: 1, max: 200, property: "scale" });
-        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 8, step: 1, precision: 0, property: "octaves" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Scale", this.properties.scale, { min: 1, max: 200, step: 1, precision: 0,  property: "scale" });
+        this.addWidget("slider", "Octaves", this.properties.octaves, { min: 1, max: 8, step: 1, precision: 0,  property: "octaves" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
 
         this.title = "Ridged Noise";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
@@ -1200,11 +1200,11 @@ class WaveInterferenceNode extends GPUNodeBase {
             decay: 0,
             seed: 1
         };
-        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.001, max: 5.000, property: "frequency" });
-        this.addWidget("slider", "Sources", this.properties.sources, { min: 1, max: 32, step: 1, precision: 0, property: "sources" });
-        this.addWidget("slider", "Phase", this.properties.phase, { min: 0, max: 6.2832, property: "phase" });
-        this.addWidget("slider", "Decay", this.properties.decay, { min: 0, max: 10, property: "decay" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.001, max: 5.000, step: 0.1, precision: 1, property: "frequency" });
+        this.addWidget("slider", "Sources", this.properties.sources, { min: 1, max: 32, step: 1, precision: 0,  property: "sources" });
+        this.addWidget("slider", "Phase", this.properties.phase, { min: 0, max: 6.2832, step: 0.1, precision: 1, property: "phase" });
+        this.addWidget("slider", "Decay", this.properties.decay, { min: 0, max: 10, step: 0.1, precision: 1, property: "decay" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
         this.title = "Wave Interference";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -1285,11 +1285,11 @@ class HarmonicNode extends GPUNodeBase {
             angle_spread: 1.0,
             seed: 1
         };
-        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.001, max: 5.000, property: "frequency" });
-        this.addWidget("slider", "Harmonics", this.properties.harmonics, { min: 1, max: 16, step: 1, precision: 0, property: "harmonics" });
-        this.addWidget("slider", "Falloff", this.properties.falloff, { min: 0.1, max: 1.0, property: "falloff" });
-        this.addWidget("slider", "Angle Spread", this.properties.angle_spread, { min: 0.0, max: 1.0, property: "angle_spread" });
-        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, property: "seed" });
+        this.addWidget("slider", "Frequency", this.properties.frequency, { min: 0.001, max: 5.000, step: 0.1, precision: 1, property: "frequency" });
+        this.addWidget("slider", "Harmonics", this.properties.harmonics, { min: 1, max: 16, step: 1, precision: 0,  property: "harmonics" });
+        this.addWidget("slider", "Falloff", this.properties.falloff, { min: 0.1, max: 1.0, step: 0.1, precision: 1, property: "falloff" });
+        this.addWidget("slider", "Angle Spread", this.properties.angle_spread, { min: 0.0, max: 1.0, step: 0.1, precision: 1, property: "angle_spread" });
+        this.addWidget("slider", "Seed", this.properties.seed, { min: 1, max: 1000, step: 1, precision: 0,  property: "seed" });
         this.title = "Harmonic";
         this.size[1] += PREVIEW_H + PREVIEW_PADDING;
     }
@@ -1364,7 +1364,7 @@ class ImageNode extends GPUNodeBase {
     constructor() {
         super();
         this.addOutput("noise", "array");
-        this.properties = { fit: "Stretch", heightMode: "Luminance", contrast: 2.0, smooth: 0 };
+        this.properties = { fit: "Stretch", heightMode: "Luminance", contrast: 2.0, smooth: 0, imageData: null };
         this.addWidget("combo", "Fit Mode", this.properties.fit, (v) => {
             this.properties.fit = v;
             if (this._img.src) this._processImage();
@@ -1378,12 +1378,12 @@ class ImageNode extends GPUNodeBase {
         this.addWidget("slider", "Contrast", this.properties.contrast, (v) => {
             this.properties.contrast = v;
             if (this._img.src) this._processImage();
-        }, { min: 0.5, max: 5, property: "contrast" });
+        }, { min: 0.5, max: 5, step: 0.1, precision: 1, property: "contrast" });
 
         this.addWidget("slider", "Smooth", this.properties.smooth, (v) => {
             this.properties.smooth = v;
             if (this._img.src) this._processImage();
-        }, { min: 0, max: 100, step: 1, precision: 0, property: "smooth" });
+        }, { min: 0, max: 100, step: 0.1, precision: 1, property: "smooth" });
 
         this.title = "Image";
 
@@ -1463,9 +1463,52 @@ class ImageNode extends GPUNodeBase {
 
         const reader = new FileReader();
         reader.onload = (evt) => {
-            this._img.src = evt.target.result;
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                let w = tempImg.width;
+                let h = tempImg.height;
+                const MAX_DIM = 1024;
+
+                // Downscale if image is too large, saving local storage space
+                if (w > MAX_DIM || h > MAX_DIM) {
+                    const scale = Math.min(MAX_DIM / w, MAX_DIM / h);
+                    w = Math.round(w * scale);
+                    h = Math.round(h * scale);
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext("2d");
+                
+                // Fill black background in case of transparency -> JPEG conversion
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, w, h);
+                ctx.drawImage(tempImg, 0, 0, w, h);
+
+                // Use high quality compression (JPEG 0.8) to keep it lightweight
+                const compressedDataURL = canvas.toDataURL("image/jpeg", 0.8);
+                
+                this.properties.imageData = compressedDataURL;
+                this._img.src = compressedDataURL;
+
+                // Force LiteGraph auto-save because properties changed
+                if (typeof autoSaveGraph !== "undefined") {
+                     autoSaveGraph();
+                }
+            };
+            tempImg.src = evt.target.result;
         };
         reader.readAsDataURL(file);
+    }
+
+    onConfigure(o) {
+        if (super.onConfigure) super.onConfigure(o);
+        if (this.properties.imageData) {
+            this._status = "Loading...";
+            this._statusColor = "#a1dcdb";
+            this._img.src = this.properties.imageData;
+        }
     }
 
     _onImageLoaded() {

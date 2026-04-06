@@ -291,6 +291,18 @@ body {
     margin-top: 0.5em;
 }
 
+.danger-btn {
+    background: #722f37 !important;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.2s;
+    border: 1px solid #922f37 !important;
+}
+
+.danger-btn:hover {
+    background: #922f37 !important;
+}
+
 
 /* Scrollbar, taken from W3C */
 /* width */
